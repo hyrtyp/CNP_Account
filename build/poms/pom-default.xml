@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.hyrt.caNoPreschool</groupId>
+  <artifactId>caNoPreschool-account</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>aar</packaging>
+  <name>CaNoPreschool account</name>
+  <description>Capital Normal preschool Project for account library</description>
+  <url>https://github.com/hyrtyp/CNP_Account</url>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>hyrtyp</id>
+      <name>yepeng</name>
+      <email>13718868826@163.com</email>
+    </developer>
+    <developer>
+      <id>gyh</id>
+      <name>guoyuehua</name>
+      <email>790005156@qq.com</email>
+    </developer>
+  </developers>
+  <scm>
+    <connection>scm:git://github.com/hyrtyp/CNP_Account.git</connection>
+    <developerConnection>scm:git@github.com/hyrtyp/CNP_Account.git</developerConnection>
+    <url>https://github.com/hyrtyp/CNP_Account.git</url>
+  </scm>
+  <dependencies>
+    <dependency>
+      <groupId>org.roboguice</groupId>
+      <artifactId>roboguice</artifactId>
+      <version>3.0-alpha-1</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.hyrt.caNoPreschool</groupId>
+      <artifactId>caNoPreschool-base</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+</project>

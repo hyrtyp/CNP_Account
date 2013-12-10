@@ -1,0 +1,120 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.6.+'
+    }
+}
+apply plugin: 'android-library'
+
+/*repositories {
+    mavenCentral()
+}*/
+
+dependencies {
+    compile 'org.roboguice:roboguice:3.0-alpha-1'
+}
+
+version = '1.0-SNAPSHOT'
+def repositoryUrl = project.hasProperty('sonatypeUrl') ? sonatypeUrl : 'http://192.168.10.128:8081'
+def repositoryUsername = project.hasProperty('sonatypeUsername') ? sonatypeUsername : 'admin'
+def repositoryPassword = project.hasProperty('sonatypePassword') ? sonatypePassword : 'admin123'
+def isReleaseVersion = !version.endsWith('SNAPSHOT')
+def artifact = 'caNoPreschool-account'
+project.ext.set('artifact', artifact)
+
+uploadArchives.dependsOn 'build'
+
+android {
+    compileSdkVersion 17
+    buildToolsVersion "17.0.0"
+
+    defaultConfig {
+        minSdkVersion 7
+        targetSdkVersion 17
+    }
+    release {
+        runProguard false
+        proguardFile 'proguard-rules.txt'
+        proguardFile getDefaultProguardFile('proguard-android.txt')
+    }
+}
+
+dependencies {
+    //compile 'com.android.support:appcompat-v7:+'
+    //compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
+    //compile 'com.hyrt.caNoPreschool:caNoPreschool-base:1.0-SNAPSHOT@aar'
+    compile project(':CaNoPreschool_Base')
+}
+
+def getPomConfiguration() {
+    return {
+        groupId project.group
+        artifactId project.artifact
+        version project.version
+        packaging 'aar'
+        name 'CaNoPreschool account'
+        description 'Capital Normal preschool Project for account library'
+        url 'https://github.com/hyrtyp/CNP_Account'
+        licenses {
+            license {
+                name 'The Apache Software License, Version 2.0'
+                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution 'repo'
+            }
+        }
+        scm {
+            url 'https://github.com/hyrtyp/CNP_Account.git'
+            connection 'scm:git://github.com/hyrtyp/CNP_Account.git'
+            developerConnection 'scm:git@github.com/hyrtyp/CNP_Account.git'
+        }
+        developers {
+            developer {
+                id 'hyrtyp'
+                name 'yepeng'
+                email '13718868826@163.com'
+            }
+            developer {
+                id 'gyh'
+                name 'guoyuehua'
+                email '790005156@qq.com'
+            }
+        }
+    }
+}
+task generatePom << {
+    def generatedPomFileName = 'pom.xml'
+    pom {
+        project(pomConfiguration)
+    }.writeTo("$buildDir/$generatedPomFileName")
+}
+
+signing {
+    if (isReleaseVersion) {
+        sign configurations.archives
+    }
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { deployment ->
+                signing.signPom(deployment)
+            }
+
+            if (isReleaseVersion) {
+                repository(url: repositoryUrl+'/nexus/content/repositories/releases/') {
+                    authentication(userName: repositoryUsername, password: repositoryPassword)
+                }
+            } else {
+                repository(url: repositoryUrl+'/nexus/content/repositories/snapshots/') {
+                    authentication(userName: repositoryUsername, password: repositoryPassword)
+                }
+            }
+            pom.project(pomConfiguration)
+        }
+    }
+
+}
+

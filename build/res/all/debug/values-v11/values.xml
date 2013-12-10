@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- From: file:/C:/Users/GYH/.ssh/CaNoPreschool/CNP_Account/build/exploded-bundles/ComActionbarsherlockActionbarsherlock440.aar/res/values-v11/values.xml -->
+    <eat-comment />
+
+    <style name="Sherlock.__Theme" parent="android:Theme.Holo">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+    </style>
+
+    <style name="Sherlock.__Theme.Light" parent="android:Theme.Holo.Light">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+    </style>
+    <!-- From: file:/C:/Users/GYH/.ssh/CaNoPreschool/CNP_Account/build/exploded-bundles/ComHyrtCaNoPreschoolCaNoPreschool_Base10SNAPSHOT.aar/res/values-v11/values.xml -->
+    <eat-comment />
+
+    <style name="Theme.Edu.Sherlock" parent="Theme.Edu.v">
+        <item name="android:actionBarStyle">@style/Widget.Edu.ActionBar</item>
+    </style>
+
+    <style name="Theme.Edu.v" parent="Sherlock.__Theme">
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="Widget.Edu.ActionBar" parent="@android:style/Widget.Holo.ActionBar">
+        <item name="android:background">#000000</item>
+        <item name="android:titleTextStyle">@style/Widget.Edu.ActionBar.Title</item>
+    </style>
+
+</resources>
