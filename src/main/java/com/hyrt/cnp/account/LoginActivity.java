@@ -25,11 +25,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
 
-import roboguice.util.RoboAsyncTask;
-
 public class LoginActivity extends ActionBarActivity {
-
-    private RoboAsyncTask<User> authenticationTask;
 
     /**
      * Auth token type parameter
@@ -130,10 +126,13 @@ public class LoginActivity extends ActionBarActivity {
 
     private void performRequest() {
         LoginActivity.this.setProgressBarIndeterminateVisibility(true);
-        AuthenticatorRequest request = new AuthenticatorRequest(new User("yepeng","yepeng"));
+        User user = new User();
+        user.setUsername("slerman@163.com");
+        user.setPassword("123456");
+        AuthenticatorRequest request = new AuthenticatorRequest(user);
         String lastRequestCacheKey = request.createCacheKey();
         spiceManager.execute(request, lastRequestCacheKey,
-                DurationInMillis.ONE_MINUTE, new RequestListener<User>(){
+                DurationInMillis.ONE_MINUTE, new RequestListener<User.UserModel>(){
 
             @Override
             public void onRequestFailure(SpiceException e) {
@@ -141,8 +140,8 @@ public class LoginActivity extends ActionBarActivity {
             }
 
             @Override
-            public void onRequestSuccess(User user) {
-                Account account = new Account(user.getName(), ACCOUNT_TYPE);
+            public void onRequestSuccess(User.UserModel user) {
+                Account account = new Account(user.getData().getUsername(), ACCOUNT_TYPE);
                 if (requestNewAccount) {
                     accountManager
                             .addAccountExplicitly(account, password, null);

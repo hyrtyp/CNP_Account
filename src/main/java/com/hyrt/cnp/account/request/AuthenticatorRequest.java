@@ -6,12 +6,12 @@ import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceReques
 /**
  * Created by yepeng on 13-12-11.
  */
-public class AuthenticatorRequest extends SpringAndroidSpiceRequest<User>{
+public class AuthenticatorRequest extends SpringAndroidSpiceRequest<User.UserModel>{
 
     private User user;
 
     public AuthenticatorRequest(User user) {
-        super(User.class);
+        super(User.UserModel.class);
         this.user = user;
     }
 
@@ -23,9 +23,9 @@ public class AuthenticatorRequest extends SpringAndroidSpiceRequest<User>{
      * TODO 加入scope inject
      */
     @Override
-    public User loadDataFromNetwork() throws Exception {
-        String url = "http://api.chinaxueqian.com/school/search/";
-        return getRestTemplate().getForObject(url, User.class);
+    public User.UserModel loadDataFromNetwork() throws Exception {
+        String url = "http://api.chinaxueqian.com/account/login?username="+user.getUsername()+"&password="+user.getPassword();
+        return getRestTemplate().getForObject(url, User.UserModel.class);
     }
 
     /**

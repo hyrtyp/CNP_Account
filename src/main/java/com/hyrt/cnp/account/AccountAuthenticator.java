@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.hyrt.cnp.account.model.User;
 import com.hyrt.cnp.account.service.UserService;
 
 import java.util.Arrays;
@@ -116,15 +117,15 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
         //TODO 获取到token，然后返回给调用者
         CNPClient client = new CNPClient();
         client.setCredentials(account.name, password);
-        UserService service = new UserService(client);
-        String authToken = "token";
+        UserService userService = new UserService(client);
+        User.UserModel user = userService.getUser();
 
-        if (TextUtils.isEmpty(authToken))
+        if (TextUtils.isEmpty(user.getData().getToken()))
             bundle.putParcelable(KEY_INTENT, createLoginIntent(response));
         else {
             bundle.putString(KEY_ACCOUNT_NAME, account.name);
             bundle.putString(KEY_ACCOUNT_TYPE, ACCOUNT_TYPE);
-            bundle.putString(KEY_AUTHTOKEN, authToken);
+            bundle.putString(KEY_AUTHTOKEN, user.getData().getToken());
             am.clearPassword(account);
         }
         return bundle;

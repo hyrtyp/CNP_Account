@@ -100,7 +100,7 @@ public class AccountUtils {
         if (user == null)
             return false;
 
-        String login = user.getName();
+        String login = user.getUsername();
         if (login == null)
             return false;
 

@@ -33,6 +33,10 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     compile 'com.android.support:appcompat-v7:+'
     compile 'org.roboguice:roboguice:2.0'
@@ -43,6 +47,8 @@ dependencies {
     compile project(':CaNoPreschool_Base')
     compile project(':CNP_Account_Service')
 }
+
+
 
 def getPomConfiguration() {
     return {
