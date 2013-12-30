@@ -113,19 +113,17 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
             return bundle;
         }
 
-
-        //TODO 获取到token，然后返回给调用者
         CNPClient client = new CNPClient();
         client.setCredentials(account.name, password);
         UserService userService = new UserService(client);
-        User.UserModel user = userService.getUser();
+        User user = userService.getUser();
 
-        if (TextUtils.isEmpty(user.getData().getToken()))
+        if (TextUtils.isEmpty(user.getToken()))
             bundle.putParcelable(KEY_INTENT, createLoginIntent(response));
         else {
             bundle.putString(KEY_ACCOUNT_NAME, account.name);
             bundle.putString(KEY_ACCOUNT_TYPE, ACCOUNT_TYPE);
-            bundle.putString(KEY_AUTHTOKEN, user.getData().getToken());
+            bundle.putString(KEY_AUTHTOKEN, user.getToken());
             am.clearPassword(account);
         }
         return bundle;

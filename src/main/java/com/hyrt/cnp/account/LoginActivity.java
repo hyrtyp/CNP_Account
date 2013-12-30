@@ -2,6 +2,7 @@ package com.hyrt.cnp.account;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
@@ -14,8 +15,12 @@ import android.view.ViewGroup;
 
 import static com.hyrt.cnp.account.AccountConstants.ACCOUNT_TYPE;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.hyrt.cnp.account.model.User;
 import com.hyrt.cnp.account.request.AuthenticatorRequest;
+import com.hyrt.cnp.account.service.MyJacksonSpringAndroidSpiceService;
+import com.hyrt.cnp.account.service.UserService;
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
@@ -25,7 +30,13 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
 
-public class LoginActivity extends ActionBarActivity {
+import java.io.File;
+import java.io.IOException;
+
+import roboguice.activity.RoboActivity;
+import roboguice.inject.ContextScope;
+
+public class LoginActivity extends RoboActivity{
 
     /**
      * Auth token type parameter
@@ -42,21 +53,34 @@ public class LoginActivity extends ActionBarActivity {
      */
     private static final String APP_ID = "411f163ce21e2352706900bdccb37c92";
 
-
-    private String password;
-
-    private String authTokenType;
-
     /**
      * Was the original caller asking for an entirely new account?
      */
     protected boolean requestNewAccount = false;
-
-    private String username;
+    private String username = "slerman@163.com";
+    private String password = "123456";
+    private String authTokenType;
 
     private AccountManager accountManager;
     private SpiceManager spiceManager = new SpiceManager(
-            JacksonSpringAndroidSpiceService.class);
+            MyJacksonSpringAndroidSpiceService.class);
+
+    @Inject
+    private UserService userService;
+
+    @Inject
+    @Named("cacheDir")
+    private File cacheDir;
+    @Inject
+    private AccountScope accountScope;
+    @Inject
+    private Activity activity;
+    @Inject
+    private ContextScope contextScope;
+
+    public String getUsername() {
+        return username;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,17 +88,10 @@ public class LoginActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main2);
         checkForUpdates();
         accountManager = AccountManager.get(this);
-
-        final Intent intent = getIntent();
-        username = intent.getStringExtra(PARAM_USERNAME);
-        authTokenType = intent.getStringExtra(PARAM_AUTHTOKEN_TYPE);
+        //final Intent intent = getIntent();
+        //username = intent.getStringExtra(PARAM_USERNAME);
+        //authTokenType = intent.getStringExtra(PARAM_AUTHTOKEN_TYPE);
         requestNewAccount = username == null;
-
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
         performRequest();
     }
 
@@ -127,8 +144,8 @@ public class LoginActivity extends ActionBarActivity {
     private void performRequest() {
         LoginActivity.this.setProgressBarIndeterminateVisibility(true);
         User user = new User();
-        user.setUsername("slerman@163.com");
-        user.setPassword("123456");
+        user.setUsername(username);
+        user.setPassword(password);
         AuthenticatorRequest request = new AuthenticatorRequest(user);
         String lastRequestCacheKey = request.createCacheKey();
         spiceManager.execute(request, lastRequestCacheKey,
@@ -147,8 +164,42 @@ public class LoginActivity extends ActionBarActivity {
                             .addAccountExplicitly(account, password, null);
                 } else
                     accountManager.setPassword(account, password);
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try{
+                        final AccountManager manager = AccountManager.get(activity);
+                        final Account account = AccountUtils.getAccount(manager, activity);
+
+                        accountScope.enterWith(account, manager);
+                        try {
+                            contextScope.enter(activity);
+                            try {
+                                System.out.println("yepeng : "+userService.getUser().getUsername());
+                            } catch (Exception e) {
+                                // Retry task if authentication failure occurs and account is
+                                // successfully updated
+                                if (AccountUtils.isUnauthorized(e)
+                                        && AccountUtils.updateAccount(account, LoginActivity.this))
+                                   System.out.println(userService.getUser().getUsername());
+                                else
+                                    throw e;
+                            } finally {
+                                contextScope.exit(activity);
+                            }
+                        } finally {
+                            accountScope.exit();
+                        }
+                        }catch(Exception e){
+                            e.printStackTrace();
+                        }
+
+                    }
+                }).start();
             }
         });
+
     }
 
     @Override

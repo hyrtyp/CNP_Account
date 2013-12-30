@@ -52,10 +52,11 @@ public class AccountClient extends CNPClient{
             Log.d(TAG, "Authenticating using " + account);
 
         // Credentials setting must come before super call
-        String token = account.getAuthToken();
+        //TODO 让首师方提供点单登陆的功能，然后恢复以下四行
+       /* String token = account.getAuthToken();
         if (!TextUtils.isEmpty(token))
             setOAuth2Token(token);
-        else
+        else*/
             setCredentials(account.getUsername(), account.getPassword());
         return super.configureRequest(httpRequest);
     }

@@ -79,7 +79,7 @@ public class AccountUtils {
                 for (AuthenticatorDescription descriptor : types)
                     if (descriptor != null
                             && ACCOUNT_TYPE.equals(descriptor.type)) {
-                        HAS_AUTHENTICATOR = "com.github.mobile"
+                        HAS_AUTHENTICATOR = "com.hyrt.cnp"
                                 .equals(descriptor.packageName);
                         break;
                     }

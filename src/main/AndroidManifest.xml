@@ -37,10 +37,14 @@
                 android:resource="@xml/authenticator" />
         </service>
 
-       <service
-            android:name="com.octo.android.robospice.JacksonSpringAndroidSpiceService"
+        <service
+            android:name="com.hyrt.cnp.account.service.MyJacksonSpringAndroidSpiceService"
             android:exported="false" />
 
+       <!--<service
+            android:name="com.octo.android.robospice.JacksonSpringAndroidSpiceService"
+            android:exported="false" />
+-->
     </application>
 
 </manifest>

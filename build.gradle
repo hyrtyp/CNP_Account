@@ -33,9 +33,9 @@ android {
     }
 }
 
-repositories {
+/*repositories {
     mavenCentral()
-}
+}*/
 
 dependencies {
     compile 'com.android.support:appcompat-v7:+'
