@@ -19,7 +19,7 @@ import com.hyrt.cnp.account.model.User;
 import com.hyrt.cnp.account.model.UserDetail;
 import com.hyrt.cnp.account.request.AuthenticatorRequest;
 import com.hyrt.cnp.account.request.UserDetailRequest;
-import com.hyrt.cnp.account.service.MyJacksonSpringAndroidSpiceService;
+import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -50,14 +50,14 @@ public class LoginActivity extends RoboActivity{
     /**
      * Was the original caller asking for an entirely new account?
      */
-    protected boolean requestNewAccount = false;
+    protected boolean requestNewAccount = true;
     private String username = "slerman@163.com";
     private String password = "123456";
     private String authTokenType;
 
     private AccountManager accountManager;
     private SpiceManager spiceManager = new SpiceManager(
-            MyJacksonSpringAndroidSpiceService.class);
+            JacksonSpringAndroidSpiceService.class);
 
     public String getUsername() {
         return username;
@@ -72,7 +72,7 @@ public class LoginActivity extends RoboActivity{
         //final Intent intent = getIntent();
         //username = intent.getStringExtra(PARAM_USERNAME);
         //authTokenType = intent.getStringExtra(PARAM_AUTHTOKEN_TYPE);
-        requestNewAccount = username == null;
+        //requestNewAccount = username == null;
         performRequest();
     }
 
@@ -127,7 +127,7 @@ public class LoginActivity extends RoboActivity{
         User user = new User();
         user.setUsername(username);
         user.setPassword(password);
-        AuthenticatorRequest request = new AuthenticatorRequest(user,this);
+        AuthenticatorRequest request = new AuthenticatorRequest(user);
         String lastRequestCacheKey = request.createCacheKey();
         spiceManager.execute(request, lastRequestCacheKey,
                 DurationInMillis.ONE_MINUTE, new RequestListener<User.UserModel>(){
@@ -145,6 +145,9 @@ public class LoginActivity extends RoboActivity{
                             .addAccountExplicitly(account, password, null);
                 } else
                     accountManager.setPassword(account, password);
+
+
+                //测试获取用户资料
                 UserDetailRequest userDetailRequest = new UserDetailRequest(LoginActivity.this);
                 spiceManager.execute(userDetailRequest,userDetailRequest.createCacheKey()
                         ,DurationInMillis.ONE_MINUTE,new RequestListener<UserDetail.UserDetailModel>() {
