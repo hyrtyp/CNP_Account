@@ -1,31 +1,28 @@
 package com.hyrt.cnp.account.request;
 
+import android.content.Context;
+
+import com.google.inject.Inject;
+import com.hyrt.cnp.account.model.Base;
 import com.hyrt.cnp.account.model.User;
-import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
+import com.hyrt.cnp.account.service.UserService;
 
 /**
  * Created by yepeng on 13-12-11.
  */
-public class AuthenticatorRequest extends SpringAndroidSpiceRequest<User.UserModel>{
+public class AuthenticatorRequest extends BaseRequest{
 
     private User user;
 
-    public AuthenticatorRequest(User user) {
-        super(User.UserModel.class);
+    public AuthenticatorRequest(User user,Context context) {
+        super(User.UserModel.class,context);
         this.user = user;
     }
 
-
-    /**
-     * start thread load data
-     * @return user base information
-     * @throws Exception
-     * TODO 加入scope inject
-     */
     @Override
-    public User.UserModel loadDataFromNetwork() throws Exception {
-        String url = "http://api.chinaxueqian.com/account/login?username="+user.getUsername()+"&password="+user.getPassword();
-        return getRestTemplate().getForObject(url, User.UserModel.class);
+    public Base run() {
+        return getRestTemplate().getForObject("http://api.chinaxueqian.com/account/login?"+"username="+user.getUsername()
+                +"&password="+ user.getPassword(),User.UserModel.class);
     }
 
     /**

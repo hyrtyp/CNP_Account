@@ -29,6 +29,11 @@ import android.util.Log;
 import com.hyrt.cnp.account.model.User;
 import com.hyrt.cnp.account.service.UserService;
 
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -112,21 +117,28 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
             bundle.putParcelable(KEY_INTENT, createLoginIntent(response));
             return bundle;
         }
-
-        CNPClient client = new CNPClient();
-        client.setCredentials(account.name, password);
-        UserService userService = new UserService(client);
-        User user = userService.getUser();
-
-        if (TextUtils.isEmpty(user.getToken()))
+        User.UserModel userModel = createRestTemplate().getForObject("http://api.chinaxueqian.com/account/login" +
+                "?username="+account.name+"&password="+password,User.UserModel.class);
+        if (TextUtils.isEmpty(userModel.getData().getToken()))
             bundle.putParcelable(KEY_INTENT, createLoginIntent(response));
         else {
             bundle.putString(KEY_ACCOUNT_NAME, account.name);
             bundle.putString(KEY_ACCOUNT_TYPE, ACCOUNT_TYPE);
-            bundle.putString(KEY_AUTHTOKEN, user.getToken());
+            bundle.putString(KEY_AUTHTOKEN, userModel.getData().getToken()+"&uuid="+userModel.getData().getUuid());
             am.clearPassword(account);
         }
         return bundle;
+    }
+
+    public RestTemplate createRestTemplate(){
+        RestTemplate restTemplate = new RestTemplate();
+
+        // web services support json responses
+        MappingJacksonHttpMessageConverter jsonConverter = new MappingJacksonHttpMessageConverter();
+        final List<HttpMessageConverter<?>> listHttpMessageConverters = restTemplate.getMessageConverters();
+        listHttpMessageConverters.add(jsonConverter);
+        restTemplate.setMessageConverters(listHttpMessageConverters);
+        return restTemplate;
     }
 
     @Override

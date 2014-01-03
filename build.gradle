@@ -39,13 +39,11 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:+'
-    compile 'org.roboguice:roboguice:2.0'
-    compile 'com.github.kevinsawicki:http-request:5.5'
     compile 'com.octo.android.robospice:robospice-spring-android:1.4.9'
     compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.9'
     compile 'net.hockeyapp.android:HockeySDK:3.0.1'
+
     compile project(':CaNoPreschool_Base')
-    compile project(':CNP_Account_Service')
 }
 
 

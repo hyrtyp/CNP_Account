@@ -19,7 +19,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.inject.Provider;
-import com.github.kevinsawicki.http.HttpRequest;
 
 import static android.util.Log.DEBUG;
 
@@ -45,20 +44,17 @@ public class AccountClient extends CNPClient{
     }
 
     @Override
-    public HttpRequest configureRequest(HttpRequest httpRequest) {
+    public void configureRequest() {
         CNPAccount account = accountProvider.get();
 
         if (Log.isLoggable(TAG, DEBUG))
             Log.d(TAG, "Authenticating using " + account);
-
-        // Credentials setting must come before super call
-        //TODO 让首师方提供点单登陆的功能，然后恢复以下四行
-       /* String token = account.getAuthToken();
+        String token = account.getAuthToken();
         if (!TextUtils.isEmpty(token))
             setOAuth2Token(token);
-        else*/
+        else
             setCredentials(account.getUsername(), account.getPassword());
-        return super.configureRequest(httpRequest);
+        super.configureRequest();
     }
 
 }
