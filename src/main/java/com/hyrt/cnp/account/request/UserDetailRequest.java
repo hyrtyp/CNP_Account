@@ -20,8 +20,8 @@ public class UserDetailRequest extends BaseRequest{
     }
 
     @Override
-    public Base run() {
-        return userService.getUser(getRestTemplate());
+    public UserDetail.UserDetailModel run() {
+        return userService.getUser();
     }
 
     /**
