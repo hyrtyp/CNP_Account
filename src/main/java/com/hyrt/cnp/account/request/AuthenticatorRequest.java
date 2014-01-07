@@ -1,7 +1,11 @@
 package com.hyrt.cnp.account.request;
 
+import com.hyrt.cnp.account.CNPClient;
 import com.hyrt.cnp.account.model.User;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
+
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * Created by yepeng on 13-12-11.
@@ -26,7 +30,14 @@ public class AuthenticatorRequest extends SpringAndroidSpiceRequest {
 
     @Override
     public User.UserModel loadDataFromNetwork() throws Exception {
-            return getRestTemplate().getForObject("http://api.chinaxueqian.com/account/login?"+"username="+user.getUsername()
-                    +"&password="+ user.getPassword(),User.UserModel.class);
+        CNPClient cnpClient = new CNPClient();
+        cnpClient.setCredentials(user.getUsername(),user.getPassword());
+        cnpClient.configureRequest();
+        return getCustomRestTemplate().postForObject("http://api.chinaxueqian.com/account/login",
+                cnpClient.getParams(), User.UserModel.class);
+    }
+
+    public RestTemplate getCustomRestTemplate() {
+        return new RestTemplate(true, new HttpComponentsClientHttpRequestFactory());
     }
 }
