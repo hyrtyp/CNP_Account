@@ -158,7 +158,7 @@ public class LoginActivity extends RoboActivity{
 
                     @Override
                     public void onRequestSuccess(UserDetail.UserDetailModel userDetailModel) {
-                        Toast.makeText(LoginActivity.this,userDetailModel.getData().getSex(),Toast.LENGTH_LONG).show();
+                        //Toast.makeText(LoginActivity.this,"success",Toast.LENGTH_LONG).show();
                     }
                 });
             }
