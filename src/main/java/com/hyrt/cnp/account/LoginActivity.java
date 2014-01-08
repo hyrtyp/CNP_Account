@@ -2,9 +2,6 @@ package com.hyrt.cnp.account;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.Activity;
-import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Toast;
 
 import static com.hyrt.cnp.account.AccountConstants.ACCOUNT_TYPE;
@@ -66,7 +64,8 @@ public class LoginActivity extends RoboActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.user_login);
         checkForUpdates();
         accountManager = AccountManager.get(this);
         //final Intent intent = getIntent();

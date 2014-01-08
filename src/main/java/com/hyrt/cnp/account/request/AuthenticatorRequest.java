@@ -5,6 +5,8 @@ import com.hyrt.cnp.account.model.User;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -30,11 +32,11 @@ public class AuthenticatorRequest extends SpringAndroidSpiceRequest {
 
     @Override
     public User.UserModel loadDataFromNetwork() throws Exception {
-        CNPClient cnpClient = new CNPClient();
-        cnpClient.setCredentials(user.getUsername(),user.getPassword());
-        cnpClient.configureRequest();
+        MultiValueMap<String,String> params = new LinkedMultiValueMap<String, String>();
+        params.set("username",user.getUsername());
+        params.set("password",user.getPassword());
         return getCustomRestTemplate().postForObject("http://api.chinaxueqian.com/account/login",
-                cnpClient.getParams(), User.UserModel.class);
+                params, User.UserModel.class);
     }
 
     public RestTemplate getCustomRestTemplate() {
