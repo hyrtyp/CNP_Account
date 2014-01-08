@@ -2,19 +2,17 @@ package com.hyrt.cnp.account;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import static com.hyrt.cnp.account.AccountConstants.ACCOUNT_TYPE;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.hyrt.cnp.account.model.User;
 import com.hyrt.cnp.account.model.UserDetail;
 import com.hyrt.cnp.account.request.AuthenticatorRequest;
@@ -29,6 +27,8 @@ import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
 
 import roboguice.activity.RoboActivity;
+
+import static com.hyrt.cnp.account.AccountConstants.ACCOUNT_TYPE;
 
 public class LoginActivity extends RoboActivity{
 
@@ -58,6 +58,9 @@ public class LoginActivity extends RoboActivity{
     private AccountManager accountManager;
     private SpiceManager spiceManager = new SpiceManager(
             JacksonSpringAndroidSpiceService.class);
+    @Inject
+    @Named("schoolIndexActivity")
+    private Class SchoolIndexActivity;
 
     public String getUsername() {
         return username;
@@ -158,7 +161,8 @@ public class LoginActivity extends RoboActivity{
 
                     @Override
                     public void onRequestSuccess(UserDetail.UserDetailModel userDetailModel) {
-                        Toast.makeText(LoginActivity.this,userDetailModel.getData().getSex(),Toast.LENGTH_LONG).show();
+                        //Toast.makeText(LoginActivity.this,userDetailModel.getData().getSex(),Toast.LENGTH_LONG).show();
+                        startActivity(new Intent().setClass(LoginActivity.this,SchoolIndexActivity));
                     }
                 });
             }
