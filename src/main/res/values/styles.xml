@@ -7,4 +7,18 @@
         <item name="android:indeterminateOnly">true</item>
     </style>
 
+    <style name="EditText">
+            <item name="android:layout_height">@dimen/user_login_et_height</item>
+               <item name="android:layout_width">match_parent</item>
+               <item name="android:background">@drawable/et_bg</item>
+               <item name="android:paddingLeft">@dimen/user_login_et_paddleft</item>
+           </style>
+
+        <style name="Button">
+            <item name="android:textColor">@color/btn_text</item>
+            <item name="android:layout_width">match_parent</item>
+            <item name="android:layout_height">@dimen/user_login_btn_height</item>
+            <item name="android:background">@drawable/btn_bg</item>
+        </style>
+
 </resources>
