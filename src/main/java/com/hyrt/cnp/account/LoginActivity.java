@@ -10,23 +10,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Toast;
-
-import static com.hyrt.cnp.account.AccountConstants.ACCOUNT_TYPE;
+import android.widget.Button;
+import android.widget.EditText;
+import com.google.inject.Inject;
+import com.hyrt.cnp.R;
 import com.hyrt.cnp.account.model.User;
-import com.hyrt.cnp.account.model.UserDetail;
 import com.hyrt.cnp.account.request.AuthenticatorRequest;
-import com.hyrt.cnp.account.request.UserDetailRequest;
+import com.hyrt.cnp.account.requestListener.LoginRequestListener;
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
-import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.listener.RequestListener;
 
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
 
 import roboguice.activity.RoboActivity;
+import com.hyrt.cnp.R;
+
 
 public class LoginActivity extends RoboActivity{
 
@@ -53,12 +53,30 @@ public class LoginActivity extends RoboActivity{
     private String password = "123456";
     private String authTokenType;
 
+    @Inject
     private AccountManager accountManager;
+
     private SpiceManager spiceManager = new SpiceManager(
             JacksonSpringAndroidSpiceService.class);
 
+    private EditText usernameEt;
+    private EditText passwordEt;
+    private Button loginBtn;
+
     public String getUsername() {
         return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public boolean isRequestNewAccount() {
+        return requestNewAccount;
+    }
+
+    public AccountManager getAccountManager() {
+        return accountManager;
     }
 
     @Override
@@ -66,13 +84,25 @@ public class LoginActivity extends RoboActivity{
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.user_login);
+        usernameEt = (EditText)findViewById(R.id.login_name_et);
+        passwordEt = (EditText)findViewById(R.id.login_password_et);
+        loginBtn = (Button)findViewById(R.id.login_btn);
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!usernameEt.getText().toString().equals("")){
+                    username = usernameEt.getText().toString();
+                    password = passwordEt.getText().toString();
+                }
+                handlerLogin();
+            }
+        });
+
         checkForUpdates();
-        accountManager = AccountManager.get(this);
         //final Intent intent = getIntent();
         //username = intent.getStringExtra(PARAM_USERNAME);
         //authTokenType = intent.getStringExtra(PARAM_AUTHTOKEN_TYPE);
         //requestNewAccount = username == null;
-        performRequest();
     }
 
     @Override
@@ -94,9 +124,9 @@ public class LoginActivity extends RoboActivity{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
+
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        //getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -121,47 +151,15 @@ public class LoginActivity extends RoboActivity{
         }
     }
 
-    private void performRequest() {
-        LoginActivity.this.setProgressBarIndeterminateVisibility(true);
+    private void handlerLogin() {
         User user = new User();
         user.setUsername(username);
         user.setPassword(password);
         AuthenticatorRequest request = new AuthenticatorRequest(user);
         String lastRequestCacheKey = request.createCacheKey();
+        LoginRequestListener loginRequestListener = new LoginRequestListener(this);
         spiceManager.execute(request, lastRequestCacheKey,
-                DurationInMillis.ONE_MINUTE, new RequestListener<User.UserModel>(){
-
-            @Override
-            public void onRequestFailure(SpiceException e) {
-                   e.printStackTrace();
-            }
-
-            @Override
-            public void onRequestSuccess(User.UserModel user) {
-                Account account = new Account(user.getData().getUsername(), ACCOUNT_TYPE);
-                if (requestNewAccount) {
-                    accountManager
-                            .addAccountExplicitly(account, password, null);
-                } else
-                    accountManager.setPassword(account, password);
-
-
-                //测试获取用户资料
-                UserDetailRequest userDetailRequest = new UserDetailRequest(LoginActivity.this);
-                spiceManager.execute(userDetailRequest,userDetailRequest.createCacheKey()
-                        ,DurationInMillis.ONE_MINUTE,new RequestListener<UserDetail.UserDetailModel>() {
-                    @Override
-                    public void onRequestFailure(SpiceException spiceException) {
-                        spiceException.printStackTrace();
-                    }
-
-                    @Override
-                    public void onRequestSuccess(UserDetail.UserDetailModel userDetailModel) {
-                        Toast.makeText(LoginActivity.this,userDetailModel.getData().getSex(),Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-        });
+                DurationInMillis.ONE_MINUTE,loginRequestListener.start());
 
     }
 
