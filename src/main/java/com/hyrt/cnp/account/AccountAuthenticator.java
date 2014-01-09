@@ -29,12 +29,9 @@ import android.util.Log;
 import com.hyrt.cnp.account.model.User;
 import com.hyrt.cnp.account.service.UserService;
 
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -120,10 +117,10 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
             bundle.putParcelable(KEY_INTENT, createLoginIntent(response));
             return bundle;
         }
-        MultiValueMap<String,String> params = new LinkedMultiValueMap<String, String>();
-        params.set("username",account.name);
-        params.set("password",password);
-        User.UserModel userModel = getCustomRestTemplate().postForObject("http://api.chinaxueqian.com/account/login",params,User.UserModel.class);
+        CNPClient cnpClient = new CNPClient();
+        cnpClient.setCredentials(account.name,password);
+        cnpClient.configureRequest();
+        User.UserModel userModel = createRestTemplate().postForObject("http://api.chinaxueqian.com/account/login",cnpClient.getParams(),User.UserModel.class);
         if (TextUtils.isEmpty(userModel.getData().getToken()))
             bundle.putParcelable(KEY_INTENT, createLoginIntent(response));
         else {
@@ -135,8 +132,15 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
         return bundle;
     }
 
-    public RestTemplate getCustomRestTemplate() {
-        return new RestTemplate(true, new HttpComponentsClientHttpRequestFactory());
+    public RestTemplate createRestTemplate(){
+        RestTemplate restTemplate = new RestTemplate();
+
+        // web services support json responses
+        MappingJacksonHttpMessageConverter jsonConverter = new MappingJacksonHttpMessageConverter();
+        final List<HttpMessageConverter<?>> listHttpMessageConverters = restTemplate.getMessageConverters();
+        listHttpMessageConverters.add(jsonConverter);
+        restTemplate.setMessageConverters(listHttpMessageConverters);
+        return restTemplate;
     }
 
     @Override
