@@ -21,11 +21,7 @@ public class UserDetailRequest extends BaseRequest{
 
     @Override
     public UserDetail.UserDetailModel run() {
-<<<<<<< HEAD
-        return userService.getUser(getRestTemplate());
-=======
         return userService.getUser();
->>>>>>> ececa967d9aa303697f1c7e383215658fa063e5b
     }
 
     /**
