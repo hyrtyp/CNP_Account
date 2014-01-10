@@ -29,9 +29,12 @@ import android.util.Log;
 import com.hyrt.cnp.account.model.User;
 import com.hyrt.cnp.account.service.UserService;
 
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -69,8 +72,8 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
      */
     @Override
     public Bundle addAccount(final AccountAuthenticatorResponse response,
-            final String accountType, final String authTokenType,
-            final String[] requiredFeatures, final Bundle options)
+                             final String accountType, final String authTokenType,
+                             final String[] requiredFeatures, final Bundle options)
             throws NetworkErrorException {
         final Intent intent = new Intent(context, LoginActivity.class);
         intent.putExtra(PARAM_AUTHTOKEN_TYPE, authTokenType);
@@ -89,7 +92,7 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle editProperties(final AccountAuthenticatorResponse response,
-            final String accountType) {
+                                 final String accountType) {
         return null;
     }
 
@@ -102,8 +105,8 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle getAuthToken(final AccountAuthenticatorResponse response,
-            final Account account, final String authTokenType,
-            final Bundle options) throws NetworkErrorException {
+                               final Account account, final String authTokenType,
+                               final Bundle options) throws NetworkErrorException {
         Log.d(TAG, "Retrieving OAuth2 token");
 
         final Bundle bundle = new Bundle();
@@ -117,28 +120,23 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
             bundle.putParcelable(KEY_INTENT, createLoginIntent(response));
             return bundle;
         }
-        User.UserModel userModel = createRestTemplate().getForObject("http://api.chinaxueqian.com/account/login" +
-                "?username="+account.name+"&password="+password,User.UserModel.class);
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
+        params.set("username", account.name);
+        params.set("password", password);
+        User.UserModel userModel = getCustomRestTemplate().postForObject("http://api.chinaxueqian.com/account/login", params, User.UserModel.class);
         if (TextUtils.isEmpty(userModel.getData().getToken()))
             bundle.putParcelable(KEY_INTENT, createLoginIntent(response));
         else {
             bundle.putString(KEY_ACCOUNT_NAME, account.name);
             bundle.putString(KEY_ACCOUNT_TYPE, ACCOUNT_TYPE);
-            bundle.putString(KEY_AUTHTOKEN, userModel.getData().getToken()+"&uuid="+userModel.getData().getUuid());
+            bundle.putString(KEY_AUTHTOKEN, userModel.getData().getToken() + "&uuid=" + userModel.getData().getUuid());
             am.clearPassword(account);
         }
         return bundle;
     }
 
-    public RestTemplate createRestTemplate(){
-        RestTemplate restTemplate = new RestTemplate();
-
-        // web services support json responses
-        MappingJacksonHttpMessageConverter jsonConverter = new MappingJacksonHttpMessageConverter();
-        final List<HttpMessageConverter<?>> listHttpMessageConverters = restTemplate.getMessageConverters();
-        listHttpMessageConverters.add(jsonConverter);
-        restTemplate.setMessageConverters(listHttpMessageConverters);
-        return restTemplate;
+    public RestTemplate getCustomRestTemplate() {
+        return new RestTemplate(true, new HttpComponentsClientHttpRequestFactory());
     }
 
     @Override
@@ -151,7 +149,7 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle hasFeatures(final AccountAuthenticatorResponse response,
-            final Account account, final String[] features)
+                              final Account account, final String[] features)
             throws NetworkErrorException {
         final Bundle result = new Bundle();
         result.putBoolean(KEY_BOOLEAN_RESULT, false);

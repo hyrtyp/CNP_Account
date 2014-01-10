@@ -15,5 +15,8 @@
   limitations under the License.
 -->
 <resources>
-    <color name="text">#1E1E1E</color>
+
+    <color name="bg">#EDEDED</color>
+    <color name="btn_text">#FFFFFF</color>
+    <color name="text">#000000</color>
 </resources>

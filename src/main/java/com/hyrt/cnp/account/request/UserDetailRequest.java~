@@ -20,7 +20,11 @@ public class UserDetailRequest extends BaseRequest{
     }
 
     @Override
+<<<<<<< HEAD
     public UserDetail.UserDetailModel run() {
+=======
+    public Base run() {
+>>>>>>> develop
         return userService.getUser();
     }
 
