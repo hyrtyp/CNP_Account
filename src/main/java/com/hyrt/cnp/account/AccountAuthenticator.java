@@ -117,8 +117,10 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
             bundle.putParcelable(KEY_INTENT, createLoginIntent(response));
             return bundle;
         }
-        User.UserModel userModel = createRestTemplate().getForObject("http://api.chinaxueqian.com/account/login" +
-                "?username="+account.name+"&password="+password,User.UserModel.class);
+        CNPClient cnpClient = new CNPClient();
+        cnpClient.setCredentials(account.name,password);
+        cnpClient.configureRequest();
+        User.UserModel userModel = createRestTemplate().postForObject("http://api.chinaxueqian.com/account/login",cnpClient.getParams(),User.UserModel.class);
         if (TextUtils.isEmpty(userModel.getData().getToken()))
             bundle.putParcelable(KEY_INTENT, createLoginIntent(response));
         else {
