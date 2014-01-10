@@ -3,9 +3,11 @@ package com.hyrt.cnp.account.requestListener;
 import android.accounts.Account;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 import com.hyrt.cnp.R;
 import com.hyrt.cnp.account.LoginActivity;
+import com.hyrt.cnp.account.manager.UserMainActivity;
 import com.hyrt.cnp.account.model.User;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
@@ -31,12 +33,15 @@ public class LoginRequestListener extends BaseRequestListener{
     public void onRequestSuccess(Object user) {
         super.onRequestSuccess(user);
         Account account = new Account(((User.UserModel)user).getData().getUsername(), ACCOUNT_TYPE);
-        LoginActivity loginActivity = (LoginActivity) context.get();
-        if (loginActivity.isRequestNewAccount()) {
-            loginActivity.getAccountManager()
-                    .addAccountExplicitly(account,loginActivity.getPassword(), null);
-        } else
-            loginActivity.getAccountManager().setPassword(account, loginActivity.getPassword());
+        if(context != null && context.get()!=null){
+            LoginActivity loginActivity = (LoginActivity) context.get();
+            if (loginActivity.isRequestNewAccount()) {
+                loginActivity.getAccountManager()
+                        .addAccountExplicitly(account,loginActivity.getPassword(), null);
+            } else
+                loginActivity.getAccountManager().setPassword(account, loginActivity.getPassword());
+            context.get().startActivity(new Intent(context.get(), UserMainActivity.class));
+        }
     }
 
     @Override

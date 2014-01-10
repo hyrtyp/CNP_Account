@@ -1,9 +1,7 @@
 package com.hyrt.cnp.account.request;
 
-import com.hyrt.cnp.account.CNPClient;
 import com.hyrt.cnp.account.model.User;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
-
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;

@@ -63,9 +63,9 @@ public class LoginActivity extends RoboActivity{
 
     private SpiceManager spiceManager = new SpiceManager(
             JacksonSpringAndroidSpiceService.class);
-    @Inject
-    @Named("schoolIndexActivity")
-    private Class SchoolIndexActivity;
+    //@Inject
+    //@Named("schoolIndexActivity")
+    //private Class SchoolIndexActivity;
 
     private EditText usernameEt;
     private EditText passwordEt;
@@ -166,7 +166,6 @@ public class LoginActivity extends RoboActivity{
         String lastRequestCacheKey = request.createCacheKey();
         LoginRequestListener loginRequestListener = new LoginRequestListener(this);
         spiceManager.execute(request, lastRequestCacheKey,
-
                 DurationInMillis.ONE_MINUTE,loginRequestListener.start());
 
     }
