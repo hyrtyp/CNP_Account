@@ -3,10 +3,14 @@
 
     <dimen name="activity_horizontal_margin_small">8dp</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_paddingtop">13dp</dimen>
+    <dimen name="activity_paddingtop">12dp</dimen>
+
     <dimen name="container_height">80dp</dimen>
-    <dimen name="container_padding">12dp</dimen>
-    <dimen name="imageview_width_small">55dp</dimen>
+    <dimen name="container_padding">8dp</dimen>
+
+    <dimen name="imageview_width_small">64dp</dimen>
+    <dimen name="iamgeview_margin_right">20dp</dimen>
+
     <dimen name="user_login_logo_margintop">30dp</dimen>
     <dimen name="user_login_et_height">45dp</dimen>
     <dimen name="user_login_nameet_margintop">44dp</dimen>
@@ -14,7 +18,12 @@
     <dimen name="user_login_et_paddleft">12dp</dimen>
     <dimen name="user_login_btn_margintop">25dp</dimen>
     <dimen name="user_login_btn_height">45dp</dimen>
-    <dimen name="tv_normal">10sp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
 
+
+    <dimen name="tv_normal">10sp</dimen>
+    <dimen name="tv_paddingtop">8dp</dimen>
+    <dimen name="tv_width">80dp</dimen>
+    <dimen name="tv_padding">11dp</dimen>
+
+    <dimen name="lv_driver_height">0.5dp</dimen>
 </resources>

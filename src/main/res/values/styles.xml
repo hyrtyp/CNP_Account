@@ -24,6 +24,35 @@
     <style name="TextView">
         <item name="android:textColor">@color/text</item>
         <item name="android:textSize">@dimen/tv_normal</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="FaceIv">
+        <item name="android:layout_width">76.5dp</item>
+        <item name="android:layout_height">76.5dp</item>
+        <item name="android:paddingRight">2.7dp</item>
+        <item name="android:paddingBottom">2.75dp</item>
+        <item name="android:paddingTop">0.25dp</item>
+        <item name="android:background">@drawable/iv_bg</item>
+        <item name="android:layout_marginRight">@dimen/iamgeview_margin_right</item>
+    </style>
+
+    <style name="RelativeLayout">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:padding">@dimen/container_padding</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/et_bg</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+
+    <style name="ListView">
+        <item name="android:background">@drawable/et_bg</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:divider">@color/lv_divider</item>
+        <item name="android:dividerHeight">@dimen/lv_driver_height</item>
+        <item name="android:layout_gravity">center_horizontal</item>
     </style>
 
 </resources>
