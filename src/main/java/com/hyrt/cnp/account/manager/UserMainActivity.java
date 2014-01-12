@@ -1,9 +1,11 @@
 package com.hyrt.cnp.account.manager;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.hyrt.cnp.R;
 
@@ -13,6 +15,19 @@ public class UserMainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_main);
+
+        findViewById(R.id.user_info).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(UserMainActivity.this,UserInfoActivity.class));
+            }
+        });
+        findViewById(R.id.update_password).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(UserMainActivity.this,UserPasswordActivity.class));
+            }
+        });
     }
 
 

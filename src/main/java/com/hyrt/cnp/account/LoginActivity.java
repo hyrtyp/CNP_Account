@@ -165,8 +165,7 @@ public class LoginActivity extends RoboActivity{
         AuthenticatorRequest request = new AuthenticatorRequest(user);
         String lastRequestCacheKey = request.createCacheKey();
         LoginRequestListener loginRequestListener = new LoginRequestListener(this);
-        spiceManager.execute(request, lastRequestCacheKey,
-                DurationInMillis.ONE_MINUTE,loginRequestListener.start());
+        spiceManager.execute(request, lastRequestCacheKey,DurationInMillis.ONE_MINUTE,loginRequestListener.start());
 
     }
 
