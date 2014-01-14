@@ -2,34 +2,22 @@ package com.hyrt.cnp.account.service;
 
 import android.app.Application;
 
+import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
+import com.octo.android.robospice.SpiceService;
 import com.octo.android.robospice.SpringAndroidSpiceService;
 import com.octo.android.robospice.persistence.CacheManager;
 import com.octo.android.robospice.persistence.exception.CacheCreationException;
-import com.octo.android.robospice.persistence.springandroid.json.jackson.JacksonObjectPersisterFactory;
+import com.octo.android.robospice.request.CachedSpiceRequest;
+import com.octo.android.robospice.request.listener.RequestListener;
+import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
+import java.util.Set;
 
 /**
- * Created by yepeng on 14-1-4.
+ * Created by yepeng on 14-1-12.
  */
-public class MyService extends SpringAndroidSpiceService {
-    @Override
-    public CacheManager createCacheManager(Application application) throws CacheCreationException {
-        CacheManager cacheManager = new CacheManager();
-        return cacheManager;
-    }
-
-    @Override
-    public RestTemplate createRestTemplate() {
-        RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory());
-        return restTemplate;
-    }
-
+public class MyService extends JacksonSpringAndroidSpiceService {
 
 }

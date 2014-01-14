@@ -54,8 +54,6 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     private static final String TAG = "CNPAccountAuthenticator";
 
-    private static final List<String> SCOPES = Arrays.asList("repo", "user", "gist");
-
     private Context context;
 
     public AccountAuthenticator(final Context context) {
@@ -123,8 +121,13 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
         params.set("username", account.name);
         params.set("password", password);
-        User.UserModel userModel = getCustomRestTemplate().postForObject("http://api.chinaxueqian.com/account/login", params, User.UserModel.class);
-        if (TextUtils.isEmpty(userModel.getData().getToken()))
+        User.UserModel userModel = null;
+        try{
+            userModel = getCustomRestTemplate().postForObject("http://api.chinaxueqian.com/account/login", params, User.UserModel.class);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        if (userModel == null || userModel.getData() == null || TextUtils.isEmpty(userModel.getData().getToken()))
             bundle.putParcelable(KEY_INTENT, createLoginIntent(response));
         else {
             bundle.putString(KEY_ACCOUNT_NAME, account.name);

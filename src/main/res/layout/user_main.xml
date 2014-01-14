@@ -45,7 +45,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/update_password"
+        android:id="@+id/update_face"
         style="@style/RelativeLayout">
 
             <TextView

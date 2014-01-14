@@ -25,7 +25,6 @@
     <Button
         style="@style/Button"
         android:text="@string/login"
-        android:layout_marginTop="@dimen/user_login_btn_margintop"
         android:id="@+id/login_btn" />
 
 </LinearLayout>

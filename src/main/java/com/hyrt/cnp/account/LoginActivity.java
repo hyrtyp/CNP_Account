@@ -20,6 +20,7 @@ import com.hyrt.cnp.R;
 import com.hyrt.cnp.account.model.User;
 import com.hyrt.cnp.account.request.AuthenticatorRequest;
 import com.hyrt.cnp.account.requestListener.LoginRequestListener;
+import com.hyrt.cnp.account.service.MyService;
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
@@ -55,7 +56,7 @@ public class LoginActivity extends RoboActivity{
      */
     protected boolean requestNewAccount = true;
     private String username = "slerman@163.com";
-    private String password = "123456";
+    private String password = "1234567";
     private String authTokenType;
 
     @Inject

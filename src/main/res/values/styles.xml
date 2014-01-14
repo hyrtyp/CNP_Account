@@ -19,7 +19,18 @@
             <item name="android:layout_width">match_parent</item>
             <item name="android:layout_height">@dimen/user_login_btn_height</item>
             <item name="android:background">@drawable/btn_bg</item>
+            <item name="android:layout_marginTop">@dimen/user_login_btn_margintop</item>
         </style>
+
+    <style name="Button_small">
+        <item name="android:textColor">@color/btn_text</item>
+        <item name="android:layout_width">275dp</item>
+        <item name="android:layout_height">@dimen/user_login_btn_height</item>
+        <item name="android:background">@drawable/btn_bg</item>
+        <item name="android:layout_marginTop">@dimen/user_login_btn_margintop</item>
+    </style>
+
+
 
     <style name="TextView">
         <item name="android:textColor">@color/text</item>
@@ -35,6 +46,14 @@
         <item name="android:paddingTop">0.25dp</item>
         <item name="android:background">@drawable/iv_bg</item>
         <item name="android:layout_marginRight">@dimen/iamgeview_margin_right</item>
+    </style>
+
+    <style name="FaceBigIv">
+        <item name="android:layout_width">275dp</item>
+        <item name="android:layout_height">275dp</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:background">@drawable/et_bg</item>
     </style>
 
     <style name="RelativeLayout">

@@ -16,9 +16,6 @@
         <activity android:name="com.hyrt.cnp.account.LoginActivity" >
         </activity>
         <activity android:name="net.hockeyapp.android.UpdateActivity" />
-        <activity android:name="com.hyrt.cnp.account.manager.UserMainActivity" />
-        <activity android:name="com.hyrt.cnp.account.manager.UserInfoActivity" />
-
 
         <service
             android:name="com.hyrt.cnp.account.AccountAuthenticatorService"
@@ -32,14 +29,6 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
         </service>
-        <service
-            android:name="com.hyrt.cnp.account.service.MyService"
-            android:exported="false" />
-
-        <!--<service
-            android:name="com.octo.android.robospice.JacksonSpringAndroidSpiceService"
-            android:exported="false" />-->
-
 
     </application>
 
