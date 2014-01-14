@@ -1,27 +1,30 @@
 package com.hyrt.cnp.account.manager;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ScrollView;
-import android.widget.SimpleAdapter;
-
 import com.hyrt.cnp.R;
+import com.hyrt.cnp.account.request.UserFaceRequest;
+import com.hyrt.cnp.account.requestListener.UserFaceRequestListener;
+import com.hyrt.cnp.account.utils.FileUtils;
+import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
+import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.DurationInMillis;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import roboguice.activity.RoboActivity;
 
-public class UserFaceActivity extends ActionBarActivity {
+public class UserFaceActivity extends RoboActivity{
+
+    private static final String TAG = "UserFaceActivity";
+
+    private SpiceManager spiceManager = new SpiceManager(
+            JacksonSpringAndroidSpiceService.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +36,10 @@ public class UserFaceActivity extends ActionBarActivity {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
                 intent.setType("image/*");
                 intent.putExtra("crop", "true");
-                intent.putExtra("aspectX", 2);
+                intent.putExtra("aspectX", 1);
                 intent.putExtra("aspectY", 1);
                 intent.putExtra("outputX", 200);
-                intent.putExtra("outputY", 100);
+                intent.putExtra("outputY", 200);
                 intent.putExtra("scale", true);
                 intent.putExtra("return-data", true);
                 intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
@@ -53,6 +56,14 @@ public class UserFaceActivity extends ActionBarActivity {
                 ImageView imageView = (ImageView) findViewById(R.id.big_face);
                 Bitmap bitmap = data.getParcelableExtra("data");
                 imageView.setImageBitmap(bitmap);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                File targetFile = FileUtils.writeFile(baos.toByteArray(),"cnp","face.jpg");
+                UserFaceRequest request = new UserFaceRequest(this, targetFile);
+                String lastRequestCacheKey = request.createCacheKey();
+                UserFaceRequestListener userFaceRequestListener = new UserFaceRequestListener(this);
+                spiceManager.execute(request, lastRequestCacheKey, DurationInMillis.ONE_MINUTE,userFaceRequestListener.start());
+
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -71,6 +82,18 @@ public class UserFaceActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        spiceManager.start(this);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        spiceManager.shouldStop();
+        super.onStop();
     }
 
 }
