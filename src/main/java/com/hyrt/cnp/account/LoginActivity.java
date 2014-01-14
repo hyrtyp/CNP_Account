@@ -56,7 +56,7 @@ public class LoginActivity extends RoboActivity{
      */
     protected boolean requestNewAccount = true;
     private String username = "slerman@163.com";
-    private String password = "1234567";
+    private String password = "123456";
     private String authTokenType;
 
     @Inject
