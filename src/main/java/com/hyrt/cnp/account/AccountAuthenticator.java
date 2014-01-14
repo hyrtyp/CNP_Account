@@ -54,8 +54,6 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     private static final String TAG = "CNPAccountAuthenticator";
 
-    private static final List<String> SCOPES = Arrays.asList("repo", "user", "gist");
-
     private Context context;
 
     public AccountAuthenticator(final Context context) {
@@ -72,8 +70,8 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
      */
     @Override
     public Bundle addAccount(final AccountAuthenticatorResponse response,
-            final String accountType, final String authTokenType,
-            final String[] requiredFeatures, final Bundle options)
+                             final String accountType, final String authTokenType,
+                             final String[] requiredFeatures, final Bundle options)
             throws NetworkErrorException {
         final Intent intent = new Intent(context, LoginActivity.class);
         intent.putExtra(PARAM_AUTHTOKEN_TYPE, authTokenType);
@@ -92,7 +90,7 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle editProperties(final AccountAuthenticatorResponse response,
-            final String accountType) {
+                                 final String accountType) {
         return null;
     }
 
@@ -105,8 +103,8 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle getAuthToken(final AccountAuthenticatorResponse response,
-            final Account account, final String authTokenType,
-            final Bundle options) throws NetworkErrorException {
+                               final Account account, final String authTokenType,
+                               final Bundle options) throws NetworkErrorException {
         Log.d(TAG, "Retrieving OAuth2 token");
 
         final Bundle bundle = new Bundle();
@@ -120,16 +118,21 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
             bundle.putParcelable(KEY_INTENT, createLoginIntent(response));
             return bundle;
         }
-        MultiValueMap<String,String> params = new LinkedMultiValueMap<String, String>();
-        params.set("username",account.name);
-        params.set("password",password);
-        User.UserModel userModel = getCustomRestTemplate().postForObject("http://api.chinaxueqian.com/account/login",params,User.UserModel.class);
-        if (TextUtils.isEmpty(userModel.getData().getToken()))
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
+        params.set("username", account.name);
+        params.set("password", password);
+        User.UserModel userModel = null;
+        try{
+            userModel = getCustomRestTemplate().postForObject("http://api.chinaxueqian.com/account/login", params, User.UserModel.class);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        if (userModel == null || userModel.getData() == null || TextUtils.isEmpty(userModel.getData().getToken()))
             bundle.putParcelable(KEY_INTENT, createLoginIntent(response));
         else {
             bundle.putString(KEY_ACCOUNT_NAME, account.name);
             bundle.putString(KEY_ACCOUNT_TYPE, ACCOUNT_TYPE);
-            bundle.putString(KEY_AUTHTOKEN, userModel.getData().getToken()+"&uuid="+userModel.getData().getUuid());
+            bundle.putString(KEY_AUTHTOKEN, userModel.getData().getToken() + "&uuid=" + userModel.getData().getUuid());
             am.clearPassword(account);
         }
         return bundle;
@@ -149,7 +152,7 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle hasFeatures(final AccountAuthenticatorResponse response,
-            final Account account, final String[] features)
+                              final Account account, final String[] features)
             throws NetworkErrorException {
         final Bundle result = new Bundle();
         result.putBoolean(KEY_BOOLEAN_RESULT, false);

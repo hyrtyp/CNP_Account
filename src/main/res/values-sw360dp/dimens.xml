@@ -2,7 +2,16 @@
     <!-- Example customization of dimensions originally defined in res/values/dimens.xml
          (such as screen margins) for screens with more than 820dp of available width. This
          would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively). -->
+    <dimen name="activity_horizontal_margin_small">12dp</dimen>
     <dimen name="activity_horizontal_margin">30dp</dimen>
+    <dimen name="activity_paddingtop">14dp</dimen>
+
+    <dimen name="container_height">100dp</dimen>
+    <dimen name="container_padding">12dp</dimen>
+
+    <dimen name="imageview_width_small">76dp</dimen>
+    <dimen name="iamgeview_margin_right">25dp</dimen>
+
     <dimen name="user_login_logo_margintop">46dp</dimen>
     <dimen name="user_login_et_height">45dp</dimen>
     <dimen name="user_login_nameet_margintop">44dp</dimen>
@@ -10,4 +19,14 @@
     <dimen name="user_login_et_paddleft">12dp</dimen>
     <dimen name="user_login_btn_margintop">25dp</dimen>
     <dimen name="user_login_btn_height">45dp</dimen>
+
+    <dimen name="tv_normal">14sp</dimen>
+    <dimen name="tv_paddingtop">12dp</dimen>
+    <dimen name="tv_width">120dp</dimen>
+    <dimen name="tv_padding">16dp</dimen>
+
+    <dimen name="lv_divider_height">0.5dp</dimen>
+
+
+
 </resources>

@@ -2,13 +2,16 @@ package com.hyrt.cnp.account;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.support.v4.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +20,7 @@ import com.hyrt.cnp.R;
 import com.hyrt.cnp.account.model.User;
 import com.hyrt.cnp.account.request.AuthenticatorRequest;
 import com.hyrt.cnp.account.requestListener.LoginRequestListener;
+import com.hyrt.cnp.account.service.MyService;
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
@@ -27,6 +31,8 @@ import net.hockeyapp.android.UpdateManager;
 import roboguice.activity.RoboActivity;
 import com.hyrt.cnp.R;
 
+
+import static com.hyrt.cnp.account.AccountConstants.ACCOUNT_TYPE;
 
 public class LoginActivity extends RoboActivity{
 
@@ -58,6 +64,9 @@ public class LoginActivity extends RoboActivity{
 
     private SpiceManager spiceManager = new SpiceManager(
             JacksonSpringAndroidSpiceService.class);
+    //@Inject
+    //@Named("schoolIndexActivity")
+    //private Class SchoolIndexActivity;
 
     private EditText usernameEt;
     private EditText passwordEt;
@@ -97,7 +106,6 @@ public class LoginActivity extends RoboActivity{
                 handlerLogin();
             }
         });
-
         checkForUpdates();
         //final Intent intent = getIntent();
         //username = intent.getStringExtra(PARAM_USERNAME);
@@ -158,8 +166,7 @@ public class LoginActivity extends RoboActivity{
         AuthenticatorRequest request = new AuthenticatorRequest(user);
         String lastRequestCacheKey = request.createCacheKey();
         LoginRequestListener loginRequestListener = new LoginRequestListener(this);
-        spiceManager.execute(request, lastRequestCacheKey,
-                DurationInMillis.ONE_MINUTE,loginRequestListener.start());
+        spiceManager.execute(request, lastRequestCacheKey,DurationInMillis.ONE_MINUTE,loginRequestListener.start());
 
     }
 
