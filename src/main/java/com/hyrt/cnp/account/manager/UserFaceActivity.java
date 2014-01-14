@@ -7,24 +7,31 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.hyrt.cnp.R;
+import com.hyrt.cnp.account.model.UserDetail;
 import com.hyrt.cnp.account.request.UserFaceRequest;
 import com.hyrt.cnp.account.requestListener.UserFaceRequestListener;
+import com.hyrt.cnp.account.utils.FaceUtils;
 import com.hyrt.cnp.account.utils.FileUtils;
+import com.jingdong.app.pad.product.drawable.HandlerRecycleBitmapDrawable;
+import com.jingdong.app.pad.utils.InflateUtil;
+import com.jingdong.common.frame.BaseActivity;
+import com.jingdong.common.utils.cache.GlobalImageCache;
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.lang.ref.WeakReference;
 
 import roboguice.activity.RoboActivity;
 
-public class UserFaceActivity extends RoboActivity{
+public class UserFaceActivity extends BaseActivity {
 
     private static final String TAG = "UserFaceActivity";
-
-    private SpiceManager spiceManager = new SpiceManager(
-            JacksonSpringAndroidSpiceService.class);
+    private WeakReference<ImageView> weakImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +54,51 @@ public class UserFaceActivity extends RoboActivity{
                 startActivityForResult(intent, 1);
             }
         });
+
+        initData();
+    }
+
+    private void initData(){
+        UserDetail.UserDetailModel userDetail = (UserDetail.UserDetailModel) getIntent().getSerializableExtra("vo");
+        String facePath = FaceUtils.getAvatar(userDetail.getData().getUser_id(), FaceUtils.FACE_BIG);
+        ImageView imageView = (ImageView)findViewById(R.id.big_face);
+        weakImageView = new WeakReference<ImageView>(imageView);
+        HandlerRecycleBitmapDrawable localHandlerRecycleBitmapDrawable = new HandlerRecycleBitmapDrawable(null, this);
+        imageView.setImageDrawable(localHandlerRecycleBitmapDrawable);
+        GlobalImageCache.BitmapDigest localBitmapDigest = new GlobalImageCache.BitmapDigest(facePath);
+        localBitmapDigest.setWidth(imageView.getWidth());
+        localBitmapDigest.setHeight(imageView.getHeight());
+        Bitmap localBitmap = InflateUtil.loadImageWithCache(localBitmapDigest);
+        if (localBitmap == null) {
+            HandlerRecycleBitmapDrawable localHandlerRecycleBitmapDrawable2 = (HandlerRecycleBitmapDrawable) imageView.getDrawable();
+            localHandlerRecycleBitmapDrawable2.setBitmap(null);
+            localHandlerRecycleBitmapDrawable.invalidateSelf();
+            InflateUtil.loadImageWithUrl(getHttpGroupaAsynPool(), localBitmapDigest, new InflateUtil.ImageLoadListener() {
+                public void onError(GlobalImageCache.BitmapDigest paramAnonymousBitmapDigest) {
+                }
+
+                public void onProgress(GlobalImageCache.BitmapDigest paramAnonymousBitmapDigest, int paramAnonymousInt1, int paramAnonymousInt2) {
+                }
+
+                public void onStart(GlobalImageCache.BitmapDigest paramAnonymousBitmapDigest) {
+                }
+
+                public void onSuccess(GlobalImageCache.BitmapDigest paramAnonymousBitmapDigest, Bitmap paramAnonymousBitmap) {
+                    if (weakImageView != null) {
+                        ImageView targetIv = weakImageView.get();
+                        if (targetIv != null) {
+                            HandlerRecycleBitmapDrawable localHandlerRecycleBitmapDrawable = (HandlerRecycleBitmapDrawable) targetIv.getDrawable();
+                            localHandlerRecycleBitmapDrawable.setBitmap(paramAnonymousBitmap);
+                            localHandlerRecycleBitmapDrawable.invalidateSelf();
+                        }
+                    }
+                }
+            });
+        } else {
+            localHandlerRecycleBitmapDrawable.setBitmap(localBitmap);
+            localHandlerRecycleBitmapDrawable.invalidateSelf();
+        }
+
     }
 
     @Override
@@ -83,17 +135,4 @@ public class UserFaceActivity extends RoboActivity{
         // as you specify a parent activity in AndroidManifest.xml.
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    protected void onStart() {
-        spiceManager.start(this);
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        spiceManager.shouldStop();
-        super.onStop();
-    }
-
 }

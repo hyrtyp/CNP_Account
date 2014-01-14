@@ -39,27 +39,11 @@ import roboguice.activity.RoboActivity;
 
 public class UserMainActivity extends BaseActivity {
 
+    private UserDetail.UserDetailModel userDetail;
+
     private WeakReference<ImageView> weakImageView;
 
-    public HttpGroup getHttpGroupaAsynPool() {
-        return getHttpGroupaAsynPool(HttpGroupSetting.TYPE_JSON);
-    }
 
-    public HttpGroup getHttpGroupaAsynPool(int type) {
-        HttpGroupSetting localHttpGroupSetting = new HttpGroupSetting();
-        localHttpGroupSetting.setType(type);
-        return getHttpGroupaAsynPool(localHttpGroupSetting);
-    }
-
-    public HttpGroup getHttpGroupaAsynPool(
-            final HttpGroupSetting paramHttpGroupSetting) {
-        HttpGroup.HttpGroupaAsynPool localHttpGroupaAsynPool = new HttpGroup.HttpGroupaAsynPool(
-                paramHttpGroupSetting);
-        return localHttpGroupaAsynPool;
-    }
-
-    private SpiceManager spiceManager = new SpiceManager(
-            JacksonSpringAndroidSpiceService.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +59,9 @@ public class UserMainActivity extends BaseActivity {
         findViewById(R.id.update_face).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(UserMainActivity.this,UserFaceActivity.class));
+                Intent intent = new Intent(UserMainActivity.this,UserFaceActivity.class);
+                intent.putExtra("vo",userDetail);
+                startActivity(intent);
             }
         });
         findViewById(R.id.update_password).setOnClickListener(new View.OnClickListener() {
@@ -120,7 +106,8 @@ public class UserMainActivity extends BaseActivity {
     }
 
     public void updateUI(UserDetail.UserDetailModel userDetail) {
-        String facePath = FaceUtils.getAvatar(104,FaceUtils.FACE_SMALL);
+        this.userDetail = userDetail;
+        String facePath = FaceUtils.getAvatar(userDetail.getData().getUser_id(),FaceUtils.FACE_SMALL);
         ImageView imageView = (ImageView)findViewById(R.id.user_face);
         weakImageView = new WeakReference<ImageView>(imageView);
         ((TextView) findViewById(R.id.class_tv)).setText(userDetail.getData().getNurseryName());
@@ -155,19 +142,12 @@ public class UserMainActivity extends BaseActivity {
                     }
                 }
             });
+        } else {
+            localHandlerRecycleBitmapDrawable.setBitmap(localBitmap);
+            localHandlerRecycleBitmapDrawable.invalidateSelf();
         }
     }
 
 
-    @Override
-    protected void onStart() {
-        spiceManager.start(this);
-        super.onStart();
-    }
 
-    @Override
-    protected void onStop() {
-        spiceManager.shouldStop();
-        super.onStop();
-    }
 }

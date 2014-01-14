@@ -21,6 +21,7 @@ import com.hyrt.cnp.account.model.User;
 import com.hyrt.cnp.account.request.AuthenticatorRequest;
 import com.hyrt.cnp.account.requestListener.LoginRequestListener;
 import com.hyrt.cnp.account.service.MyService;
+import com.jingdong.common.frame.BaseActivity;
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
@@ -34,7 +35,7 @@ import com.hyrt.cnp.R;
 
 import static com.hyrt.cnp.account.AccountConstants.ACCOUNT_TYPE;
 
-public class LoginActivity extends RoboActivity{
+public class LoginActivity extends BaseActivity {
 
     /**
      * Auth token type parameter
@@ -170,16 +171,6 @@ public class LoginActivity extends RoboActivity{
 
     }
 
-    @Override
-    protected void onStart() {
-        spiceManager.start(this);
-        super.onStart();
-    }
 
-    @Override
-    protected void onStop() {
-        spiceManager.shouldStop();
-        super.onStop();
-    }
 
 }

@@ -11,6 +11,7 @@
             <item name="android:layout_height">@dimen/user_login_et_height</item>
                <item name="android:layout_width">match_parent</item>
                <item name="android:background">@drawable/et_bg</item>
+                <item name="android:textColor">@color/text</item>
                <item name="android:paddingLeft">@dimen/user_login_et_paddleft</item>
            </style>
 
