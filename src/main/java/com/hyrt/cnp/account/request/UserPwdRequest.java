@@ -3,33 +3,33 @@ package com.hyrt.cnp.account.request;
 import android.content.Context;
 
 import com.google.inject.Inject;
-import com.hyrt.cnp.account.manager.UserFaceActivity;
 import com.hyrt.cnp.account.model.BaseTest;
-import com.hyrt.cnp.account.model.UserDetail;
+import com.hyrt.cnp.account.request.BaseRequest;
 import com.hyrt.cnp.account.service.UserService;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.InputStream;
 
 /**
  * Created by yepeng on 14-1-3.
  */
-public class UserFaceRequest extends BaseRequest{
+public class UserPwdRequest extends BaseRequest{
 
     @Inject
     private UserService userService;
+    private String password;
+    private String newPwd;
+    private String repeatPwd;
 
-    private File faceFile;
-
-    public UserFaceRequest(Context context,File faceFile) {
+    public UserPwdRequest(Context context,String password,String newPwd,String repeatPwd) {
         super(BaseTest.class,context);
-        this.faceFile = faceFile;
+        this.password = password;
+        this.newPwd = newPwd;
+        this.repeatPwd = repeatPwd;
     }
 
     @Override
     public BaseTest run() {
-        return userService.modifyUserFace(faceFile);
+        return userService.modifyUserPassword(password,newPwd,repeatPwd);
     }
 
     /**
@@ -38,6 +38,6 @@ public class UserFaceRequest extends BaseRequest{
      * @return
      */
     public String createCacheKey() {
-        return "user.face";
+        return "user.pwd";
     }
 }

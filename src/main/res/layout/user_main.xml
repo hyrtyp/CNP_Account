@@ -14,7 +14,6 @@
         <ImageView
             style="@style/FaceIv"
             android:id="@+id/user_face"
-            android:src="@drawable/face"
             />
 
         <LinearLayout

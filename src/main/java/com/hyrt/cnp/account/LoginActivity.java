@@ -60,14 +60,7 @@ public class LoginActivity extends BaseActivity {
     private String password = "123456";
     private String authTokenType;
 
-    @Inject
     private AccountManager accountManager;
-
-    private SpiceManager spiceManager = new SpiceManager(
-            JacksonSpringAndroidSpiceService.class);
-    //@Inject
-    //@Named("schoolIndexActivity")
-    //private Class SchoolIndexActivity;
 
     private EditText usernameEt;
     private EditText passwordEt;
@@ -92,8 +85,9 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.user_login);
+        actionBar.setDisplayShowHomeEnabled(false);
+        accountManager = AccountManager.get(this);
         usernameEt = (EditText)findViewById(R.id.login_name_et);
         passwordEt = (EditText)findViewById(R.id.login_password_et);
         loginBtn = (Button)findViewById(R.id.login_btn);
@@ -129,37 +123,6 @@ public class LoginActivity extends BaseActivity {
         UpdateManager.register(this, APP_ID);
     }
 
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main2, container, false);
-            return rootView;
-        }
-    }
-
     private void handlerLogin() {
         User user = new User();
         user.setUsername(username);
@@ -170,7 +133,5 @@ public class LoginActivity extends BaseActivity {
         spiceManager.execute(request, lastRequestCacheKey,DurationInMillis.ONE_MINUTE,loginRequestListener.start());
 
     }
-
-
 
 }

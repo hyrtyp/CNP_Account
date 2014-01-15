@@ -53,7 +53,9 @@ public class UserMainActivity extends BaseActivity {
         findViewById(R.id.user_info).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(UserMainActivity.this,UserInfoActivity.class));
+                Intent intent = new Intent(UserMainActivity.this,UserInfoActivity.class);
+                intent.putExtra("vo",userDetail);
+                startActivity(intent);
             }
         });
         findViewById(R.id.update_face).setOnClickListener(new View.OnClickListener() {
@@ -67,7 +69,9 @@ public class UserMainActivity extends BaseActivity {
         findViewById(R.id.update_password).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(UserMainActivity.this,UserPasswordActivity.class));
+                Intent intent = new Intent(UserMainActivity.this,UserPasswordActivity.class);
+                intent.putExtra("vo",userDetail);
+                startActivity(intent);
             }
         });
     }
@@ -88,29 +92,13 @@ public class UserMainActivity extends BaseActivity {
                 DurationInMillis.ONE_MINUTE, userDetailRequestListener.start());
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.user_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return super.onOptionsItemSelected(item);
-    }
-
     public void updateUI(UserDetail.UserDetailModel userDetail) {
         this.userDetail = userDetail;
         String facePath = FaceUtils.getAvatar(userDetail.getData().getUser_id(),FaceUtils.FACE_SMALL);
         ImageView imageView = (ImageView)findViewById(R.id.user_face);
         weakImageView = new WeakReference<ImageView>(imageView);
         ((TextView) findViewById(R.id.class_tv)).setText(userDetail.getData().getNurseryName());
+        ((TextView) findViewById(R.id.name_tv)).setText(userDetail.getData().getRenname());
         HandlerRecycleBitmapDrawable localHandlerRecycleBitmapDrawable = new HandlerRecycleBitmapDrawable(null, this);
         imageView.setImageDrawable(localHandlerRecycleBitmapDrawable);
         GlobalImageCache.BitmapDigest localBitmapDigest = new GlobalImageCache.BitmapDigest(facePath);
