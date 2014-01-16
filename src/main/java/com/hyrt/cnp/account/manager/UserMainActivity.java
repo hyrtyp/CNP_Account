@@ -49,6 +49,7 @@ public class UserMainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_main);
+        RoboActivity
 
         findViewById(R.id.user_info).setOnClickListener(new View.OnClickListener() {
             @Override

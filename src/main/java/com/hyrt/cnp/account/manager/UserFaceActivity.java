@@ -2,7 +2,9 @@ package com.hyrt.cnp.account.manager;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +34,9 @@ public class UserFaceActivity extends BaseActivity {
 
     private static final String TAG = "UserFaceActivity";
     private WeakReference<ImageView> weakImageView;
+    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    private static final int FORDORA_IMAGE_ACTIVITY_REQUEST_CODE = 1;
+    private  GlobalImageCache.BitmapDigest localBitmapDigest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +56,16 @@ public class UserFaceActivity extends BaseActivity {
                 intent.putExtra("return-data", true);
                 intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
                 intent.putExtra("noFaceDetection", true); // no face detection
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, FORDORA_IMAGE_ACTIVITY_REQUEST_CODE);
             }
         });
 
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         initData();
     }
 
@@ -65,7 +76,7 @@ public class UserFaceActivity extends BaseActivity {
         weakImageView = new WeakReference<ImageView>(imageView);
         HandlerRecycleBitmapDrawable localHandlerRecycleBitmapDrawable = new HandlerRecycleBitmapDrawable(null, this);
         imageView.setImageDrawable(localHandlerRecycleBitmapDrawable);
-        GlobalImageCache.BitmapDigest localBitmapDigest = new GlobalImageCache.BitmapDigest(facePath);
+        localBitmapDigest = new GlobalImageCache.BitmapDigest(facePath);
         localBitmapDigest.setWidth(imageView.getWidth());
         localBitmapDigest.setHeight(imageView.getHeight());
         Bitmap localBitmap = InflateUtil.loadImageWithCache(localBitmapDigest);
@@ -101,9 +112,14 @@ public class UserFaceActivity extends BaseActivity {
 
     }
 
+    public void removeCacheFace(){
+        GlobalImageCache.remove(localBitmapDigest);
+        initData();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 1){
+        if(requestCode == FORDORA_IMAGE_ACTIVITY_REQUEST_CODE){
             if(data != null){
                 ImageView imageView = (ImageView) findViewById(R.id.big_face);
                 Bitmap bitmap = data.getParcelableExtra("data");
@@ -117,6 +133,8 @@ public class UserFaceActivity extends BaseActivity {
                 spiceManager.execute(request, lastRequestCacheKey, DurationInMillis.ONE_SECOND,userFaceRequestListener.start());
 
             }
+        }else if(requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE){
+
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

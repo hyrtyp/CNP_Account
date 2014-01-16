@@ -28,6 +28,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * TODO  部分字段不明确，需要后期增加，还有字典
+ */
 public class UserInfoActivity extends BaseActivity {
 
     private StringBuilder renname = new StringBuilder();

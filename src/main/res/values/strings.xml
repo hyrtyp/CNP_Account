@@ -27,16 +27,16 @@
     <string name="error_username">你输入的用户名密码错误,请重新输入!</string>
 
     <string name="face_msg_title">上传头像提示</string>
-    <string name="face_msg_content">上传失败,请稍后再试</string>
-    <string name="face_msgerror_content">上传成功!</string>
+    <string name="face_msg_content">上传成功!</string>
+    <string name="face_msgerror_content">上传失败,请稍后再试</string>
 
     <string name="pwd_msg_title">修改密码提示</string>
-    <string name="pwd_msg_content">修改失败,请稍后再试</string>
-    <string name="pwd_msgerror_content">修改成功!</string>
+    <string name="pwd_msg_content">修改成功!</string>
+    <string name="pwd_msgerror_content">修改失败,请稍后再试</string>
 
     <string name="info_msg_title">修改资料提示</string>
-    <string name="info_msg_content">修改失败,请稍后再试</string>
-    <string name="info_msgerror_content">修改成功!</string>
+    <string name="info_msg_content">修改成功!</string>
+    <string name="info_msgerror_content">修改失败,请稍后再试!</string>
 
 
     <string name="login_title">登陆</string>
@@ -44,8 +44,5 @@
     <string name="userface_title">头像修改</string>
     <string name="userpassword_title">密码修改</string>
     <string name="userinfo_title">用户资料</string>
-
-
-    <string name="title_activity_user_main">UserMainActivity</string>
 
 </resources>

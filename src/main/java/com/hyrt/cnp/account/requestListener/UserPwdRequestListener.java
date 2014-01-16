@@ -28,7 +28,7 @@ public class UserPwdRequestListener extends BaseRequestListener{
     public void onRequestSuccess(Object baseTest) {
         super.onRequestSuccess(baseTest);
         if(context != null && context.get()!=null){
-            if(!((BaseTest)baseTest).getCode().equals("200")){
+            if(((BaseTest)baseTest).getCode().equals("200")){
                 showMessage(R.string.pwd_msg_title,R.string.pwd_msg_content);
             }else{
                 showMessage(R.string.pwd_msg_title,R.string.pwd_msgerror_content);

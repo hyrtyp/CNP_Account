@@ -28,7 +28,7 @@ public class UserInfoUpdateRequestListener extends BaseRequestListener{
     public void onRequestSuccess(Object baseTest) {
         super.onRequestSuccess(baseTest);
         if(context != null && context.get()!=null){
-            if(!((BaseTest)baseTest).getCode().equals("200")){
+            if(((BaseTest)baseTest).getCode().equals("200")){
                 showMessage(R.string.info_msg_title,R.string.info_msg_content);
             }else{
                 showMessage(R.string.info_msg_title,R.string.info_msgerror_content);

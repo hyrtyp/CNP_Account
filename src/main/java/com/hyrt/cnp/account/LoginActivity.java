@@ -57,7 +57,7 @@ public class LoginActivity extends BaseActivity {
      */
     protected boolean requestNewAccount = true;
     private String username = "slerman@163.com";
-    private String password = "123456";
+    private String password = "123";
     private String authTokenType;
 
     private AccountManager accountManager;

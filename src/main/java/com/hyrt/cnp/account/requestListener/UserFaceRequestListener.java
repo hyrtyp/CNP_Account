@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.hyrt.cnp.R;
+import com.hyrt.cnp.account.manager.UserFaceActivity;
 import com.hyrt.cnp.account.manager.UserMainActivity;
 import com.hyrt.cnp.account.model.BaseTest;
 import com.hyrt.cnp.account.model.UserDetail;
@@ -31,8 +32,9 @@ public class UserFaceRequestListener extends BaseRequestListener{
     public void onRequestSuccess(Object baseTest) {
         super.onRequestSuccess(baseTest);
         if(context != null && context.get()!=null){
-            if(!((BaseTest)baseTest).getCode().equals("200")){
+            if(((BaseTest)baseTest).getCode().equals("200")){
                 showMessage(R.string.face_msg_title,R.string.face_msg_content);
+                ((UserFaceActivity)context.get()).removeCacheFace();
             }else{
                 showMessage(R.string.face_msg_title,R.string.face_msgerror_content);
             } 
