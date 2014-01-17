@@ -34,7 +34,7 @@ public class UserFaceRequestListener extends BaseRequestListener{
         if(context != null && context.get()!=null){
             if(((BaseTest)baseTest).getCode().equals("200")){
                 showMessage(R.string.face_msg_title,R.string.face_msg_content);
-                ((UserFaceActivity)context.get()).removeCacheFace();
+                ((UserFaceActivity)context.get()).updateCacheAndUI();
             }else{
                 showMessage(R.string.face_msg_title,R.string.face_msgerror_content);
             } 

@@ -18,9 +18,9 @@ import roboguice.RoboGuice;
 public class UserDetailRequestListener extends BaseRequestListener{
 
 
-    @Inject
-    @Named("schoolIndexActivity")
-    private Class schoolIndexClass;
+    //@Inject
+    //@Named("schoolIndexActivity")
+    //private Class schoolIndexClass;
 
 
     /**
@@ -44,7 +44,7 @@ public class UserDetailRequestListener extends BaseRequestListener{
                 UserMainActivity userMainActivity = (UserMainActivity) context.get();
                 userMainActivity.updateUI((UserDetail.UserDetailModel)userDetail);
             }else{
-                context.get().startActivity(new Intent(context.get(),schoolIndexClass));
+                //context.get().startActivity(new Intent(context.get(),schoolIndexClass));
             } 
         }
     }
