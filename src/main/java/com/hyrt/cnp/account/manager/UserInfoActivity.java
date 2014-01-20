@@ -146,6 +146,12 @@ public class UserInfoActivity extends BaseActivity {
                 return linearLayout;
             }
         });
+        findViewById(R.id.userinfo_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initData();
+            }
+        });
     }
 
     @Override

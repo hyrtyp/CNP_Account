@@ -14,8 +14,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.hyrt.cnp.R;
+import com.hyrt.cnp.account.model.UserDetail;
 import com.hyrt.cnp.account.request.UserDetailRequest;
 import com.hyrt.cnp.account.request.UserPwdRequest;
 import com.hyrt.cnp.account.requestListener.UserDetailRequestListener;
@@ -34,16 +36,18 @@ public class UserPasswordActivity extends BaseActivity{
     private StringBuilder oldPassword = new StringBuilder();
     private StringBuilder newPassword = new StringBuilder();
     private StringBuilder renewPassword = new StringBuilder();
+    private UserDetail.UserDetailModel userDetail;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_password);
+        userDetail = ( UserDetail.UserDetailModel)getIntent().getSerializableExtra("vo");
         List<Map<String,StringBuilder>> values = new ArrayList<Map<String,StringBuilder>>();
         Map<String,StringBuilder> item1 = new HashMap<String, StringBuilder>();
         item1.put("title",new StringBuilder("当前账号"));
-        item1.put("content",new StringBuilder("13718868826"));
+        item1.put("content",new StringBuilder(userDetail.getData().getRenname()));
         values.add(item1);
         Map<String,StringBuilder> item2 = new HashMap<String, StringBuilder>();
         item2.put("title",new StringBuilder("当前密码"));
@@ -63,44 +67,56 @@ public class UserPasswordActivity extends BaseActivity{
             public View getView(final int position, View convertView, ViewGroup parent) {
                 final LinearLayout linearLayout = (LinearLayout) super.getView(position, convertView, parent);
                 if(linearLayout != null){
+                    if(position == 0){
+                        EditText editText = (EditText) linearLayout.findViewById(R.id.content);
+                        TextView textView =  (TextView)linearLayout.findViewById(R.id.title);
+                        textView.setTextColor(getResources().getColor(android.R.color.black));
+                        editText.setEnabled(false);
+                    }
                     linearLayout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             EditText editText = (EditText) linearLayout.findViewById(R.id.content);
-                            editText.requestFocus();
-                            editText.addTextChangedListener(new TextWatcher(){
+                            if(position == 0){
+                                TextView textView =  (TextView)linearLayout.findViewById(R.id.title);
+                                textView.setTextColor(getResources().getColor(android.R.color.black));
+                                editText.setEnabled(false);
+                            }else{
+                                editText.requestFocus();
+                                editText.addTextChangedListener(new TextWatcher(){
 
-                                @Override
-                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                    @Override
+                                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                                }
-
-                                @Override
-                                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                                }
-
-                                @Override
-                                public void afterTextChanged(Editable s) {
-                                    if(s.toString().length() == 0)
-                                        return;
-                                    switch (position){
-                                        case 1:
-                                                oldPassword.delete(0,oldPassword.length());
-                                                oldPassword.append(s.toString());
-                                            break;
-                                        case 2:
-                                                newPassword.delete(0, oldPassword.length());
-                                                newPassword.append(s.toString());
-                                            break;
-                                        case 3:
-                                                renewPassword.delete(0, oldPassword.length());
-                                                renewPassword.append(s.toString());
-                                            break;
                                     }
 
-                                }
-                            });
+                                    @Override
+                                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                                    }
+
+                                    @Override
+                                    public void afterTextChanged(Editable s) {
+                                        if(s.toString().length() == 0)
+                                            return;
+                                        switch (position){
+                                            case 1:
+                                                oldPassword.delete(0,oldPassword.length());
+                                                oldPassword.append(s.toString());
+                                                break;
+                                            case 2:
+                                                newPassword.delete(0, oldPassword.length());
+                                                newPassword.append(s.toString());
+                                                break;
+                                            case 3:
+                                                renewPassword.delete(0, oldPassword.length());
+                                                renewPassword.append(s.toString());
+                                                break;
+                                        }
+
+                                    }
+                                });
+                            }
                         }
                     });
                 }
@@ -108,6 +124,12 @@ public class UserPasswordActivity extends BaseActivity{
             }
         };
         ((ListView)findViewById(R.id.user_info_listview)).setAdapter(simpleAdapter);
+        findViewById(R.id.password_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initData();
+            }
+        });
     }
 
     @Override

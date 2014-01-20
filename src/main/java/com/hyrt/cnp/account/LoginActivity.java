@@ -1,27 +1,16 @@
 package com.hyrt.cnp.account;
 
-import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import com.google.inject.Inject;
 import com.hyrt.cnp.R;
 import com.hyrt.cnp.account.model.User;
 import com.hyrt.cnp.account.request.AuthenticatorRequest;
 import com.hyrt.cnp.account.requestListener.LoginRequestListener;
-import com.hyrt.cnp.account.service.MyService;
-import com.jingdong.common.frame.BaseActivity;
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
@@ -30,12 +19,8 @@ import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
 
 import roboguice.activity.RoboActivity;
-import com.hyrt.cnp.R;
 
-
-import static com.hyrt.cnp.account.AccountConstants.ACCOUNT_TYPE;
-
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends RoboActivity{
 
     /**
      * Auth token type parameter
@@ -65,6 +50,8 @@ public class LoginActivity extends BaseActivity {
     private EditText usernameEt;
     private EditText passwordEt;
     private Button loginBtn;
+    public SpiceManager spiceManager = new SpiceManager(
+            JacksonSpringAndroidSpiceService.class);
 
     public String getUsername() {
         return username;
@@ -84,9 +71,10 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //无title
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_login);
-        actionBar.setDisplayShowHomeEnabled(false);
         accountManager = AccountManager.get(this);
         usernameEt = (EditText)findViewById(R.id.login_name_et);
         passwordEt = (EditText)findViewById(R.id.login_password_et);
@@ -106,6 +94,19 @@ public class LoginActivity extends BaseActivity {
         //username = intent.getStringExtra(PARAM_USERNAME);
         //authTokenType = intent.getStringExtra(PARAM_AUTHTOKEN_TYPE);
         //requestNewAccount = username == null;
+    }
+
+
+    @Override
+    protected void onStart() {
+        spiceManager.start(this);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        spiceManager.shouldStop();
+        super.onStop();
     }
 
     @Override

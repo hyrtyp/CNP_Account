@@ -39,7 +39,9 @@
                 android:id="@+id/class_tv" />
 
         </LinearLayout>
-
+        
+        <ImageView
+            style="@style/indexIv"/>
 
     </RelativeLayout>
 
@@ -54,6 +56,9 @@
                 style="@style/TextView"
                  />
 
+        <ImageView
+            style="@style/indexIv"/>
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -66,6 +71,9 @@
             android:text="@string/update_password"
             style="@style/TextView"
             />
+
+        <ImageView
+            style="@style/indexIv"/>
 
     </RelativeLayout>
 
