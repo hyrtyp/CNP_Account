@@ -14,7 +14,6 @@
         <ImageView
             style="@style/FaceIv"
             android:id="@+id/user_face"
-            android:src="@drawable/face"
             />
 
         <LinearLayout
@@ -40,7 +39,9 @@
                 android:id="@+id/class_tv" />
 
         </LinearLayout>
-
+        
+        <ImageView
+            style="@style/indexIv"/>
 
     </RelativeLayout>
 
@@ -55,6 +56,9 @@
                 style="@style/TextView"
                  />
 
+        <ImageView
+            style="@style/indexIv"/>
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -67,6 +71,9 @@
             android:text="@string/update_password"
             style="@style/TextView"
             />
+
+        <ImageView
+            style="@style/indexIv"/>
 
     </RelativeLayout>
 

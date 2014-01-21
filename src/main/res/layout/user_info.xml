@@ -15,6 +15,12 @@
             style="@style/ListView"
             android:id="@+id/user_info_listview" />
 
+        <Button
+            style="@style/Button"
+            android:layout_below="@+id/user_info_listview"
+            android:text="@string/update_info"
+            android:id="@+id/userinfo_btn" />
+
     </RelativeLayout>
 
 

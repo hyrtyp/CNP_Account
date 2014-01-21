@@ -16,8 +16,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/TextView"
-        android:background="@null"
+        style="@style/EditText_small"
         android:padding="@dimen/tv_padding"
         android:id="@+id/content"
         />

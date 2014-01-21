@@ -1,26 +1,16 @@
 package com.hyrt.cnp.account;
 
-import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import com.google.inject.Inject;
 import com.hyrt.cnp.R;
 import com.hyrt.cnp.account.model.User;
 import com.hyrt.cnp.account.request.AuthenticatorRequest;
 import com.hyrt.cnp.account.requestListener.LoginRequestListener;
-import com.hyrt.cnp.account.service.MyService;
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
@@ -29,10 +19,6 @@ import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
 
 import roboguice.activity.RoboActivity;
-import com.hyrt.cnp.R;
-
-
-import static com.hyrt.cnp.account.AccountConstants.ACCOUNT_TYPE;
 
 public class LoginActivity extends RoboActivity{
 
@@ -56,21 +42,16 @@ public class LoginActivity extends RoboActivity{
      */
     protected boolean requestNewAccount = true;
     private String username = "slerman@163.com";
-    private String password = "123456";
+    private String password = "123";
     private String authTokenType;
 
-    @Inject
     private AccountManager accountManager;
-
-    private SpiceManager spiceManager = new SpiceManager(
-            JacksonSpringAndroidSpiceService.class);
-    //@Inject
-    //@Named("schoolIndexActivity")
-    //private Class SchoolIndexActivity;
 
     private EditText usernameEt;
     private EditText passwordEt;
     private Button loginBtn;
+    public SpiceManager spiceManager = new SpiceManager(
+            JacksonSpringAndroidSpiceService.class);
 
     public String getUsername() {
         return username;
@@ -90,9 +71,11 @@ public class LoginActivity extends RoboActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        //无title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.user_login);
+        accountManager = AccountManager.get(this);
         usernameEt = (EditText)findViewById(R.id.login_name_et);
         passwordEt = (EditText)findViewById(R.id.login_password_et);
         loginBtn = (Button)findViewById(R.id.login_btn);
@@ -113,6 +96,19 @@ public class LoginActivity extends RoboActivity{
         //requestNewAccount = username == null;
     }
 
+
+    @Override
+    protected void onStart() {
+        spiceManager.start(this);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        spiceManager.shouldStop();
+        super.onStop();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -128,37 +124,6 @@ public class LoginActivity extends RoboActivity{
         UpdateManager.register(this, APP_ID);
     }
 
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main2, container, false);
-            return rootView;
-        }
-    }
-
     private void handlerLogin() {
         User user = new User();
         user.setUsername(username);
@@ -168,18 +133,6 @@ public class LoginActivity extends RoboActivity{
         LoginRequestListener loginRequestListener = new LoginRequestListener(this);
         spiceManager.execute(request, lastRequestCacheKey,DurationInMillis.ONE_MINUTE,loginRequestListener.start());
 
-    }
-
-    @Override
-    protected void onStart() {
-        spiceManager.start(this);
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        spiceManager.shouldStop();
-        super.onStop();
     }
 
 }

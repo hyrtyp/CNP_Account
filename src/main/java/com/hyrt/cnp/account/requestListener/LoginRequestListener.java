@@ -31,7 +31,7 @@ public class LoginRequestListener extends BaseRequestListener{
 
     @Override
     public void onRequestFailure(SpiceException e) {
-        showErrorLogin();
+        showMessage(R.string.login_notice, R.string.error_username);
         super.onRequestFailure(e);
     }
 
@@ -57,20 +57,4 @@ public class LoginRequestListener extends BaseRequestListener{
         return this;
     }
 
-    protected void showErrorLogin() {
-        if(context != null && context.get() != null){
-            AlertDialog dialog = LightAlertDialog.create(context.get());
-            dialog.setTitle(R.string.login_notice);
-            dialog.setMessage(context.get().getResources().getString(R.string.error_username));
-            dialog.setButton(BUTTON_POSITIVE, getString(android.R.string.ok),
-                    new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-            dialog.show();
-        }
-    }
 }
