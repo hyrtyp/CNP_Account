@@ -132,7 +132,9 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
         else {
             bundle.putString(KEY_ACCOUNT_NAME, account.name);
             bundle.putString(KEY_ACCOUNT_TYPE, ACCOUNT_TYPE);
-            bundle.putString(KEY_AUTHTOKEN, userModel.getData().getToken() + "&uuid=" + userModel.getData().getUuid() + "&sid=" + userModel.getData().getNursery_id());
+            bundle.putString(KEY_AUTHTOKEN, userModel.getData().getToken() + "&uuid=" + userModel.getData().getUuid() +
+                    "&sid=" + userModel.getData().getNursery_id() +
+                    "&cid=" + userModel.getData().getClassroom());
             am.clearPassword(account);
         }
         return bundle;
