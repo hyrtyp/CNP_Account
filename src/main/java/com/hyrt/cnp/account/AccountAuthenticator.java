@@ -37,6 +37,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -126,10 +127,11 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
             userModel = getCustomRestTemplate().postForObject("http://api.chinaxueqian.com/account/login", params, User.UserModel.class);
         }catch(Exception e){
             e.printStackTrace();
+            throw new NetworkErrorException(new IOException("No authentication challenges found"));
         }
-        if (userModel == null || userModel.getData() == null || TextUtils.isEmpty(userModel.getData().getToken()))
+        if (userModel == null || userModel.getData() == null || TextUtils.isEmpty(userModel.getData().getToken())){
             bundle.putParcelable(KEY_INTENT, createLoginIntent(response));
-        else {
+        }else {
             bundle.putString(KEY_ACCOUNT_NAME, account.name);
             bundle.putString(KEY_ACCOUNT_TYPE, ACCOUNT_TYPE);
             bundle.putString(KEY_AUTHTOKEN, userModel.getData().getToken() + "&uuid=" + userModel.getData().getUuid() +

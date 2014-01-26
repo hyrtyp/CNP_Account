@@ -46,8 +46,7 @@ public class LoginRequestListener extends BaseRequestListener{
                             .addAccountExplicitly(account, loginActivity.getPassword(), null);
                 } else
                     loginActivity.getAccountManager().setPassword(account, loginActivity.getPassword());
-                context.get().startActivity(new Intent(context.get(), UserMainActivity.class));
-                context.get().finish();
+                loginActivity.finishLogin(account.name,loginActivity.getPassword());
             }
     }
 
