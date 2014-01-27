@@ -49,7 +49,7 @@ public class UserFaceActivity extends BaseActivity {
         findViewById(R.id.upload_face).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                faceFile = Uri.fromFile(FileUtils.createFile("cnp", "face.jpg"));
+                faceFile = Uri.fromFile(FileUtils.createFile("cnp", "face.png"));
                 photoUpload = new PhotoUpload(UserFaceActivity.this, faceFile);
                 photoUpload.choiceItem();
             }
@@ -119,7 +119,7 @@ public class UserFaceActivity extends BaseActivity {
             bitmap = data.getParcelableExtra("data");
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            File targetFile = FileUtils.writeFile(baos.toByteArray(), "cnp", "face.jpg");
+            File targetFile = FileUtils.writeFile(baos.toByteArray(), "cnp", "face.png");
 
             //上传图片资源
             UserFaceRequest request = new UserFaceRequest(this, targetFile);
