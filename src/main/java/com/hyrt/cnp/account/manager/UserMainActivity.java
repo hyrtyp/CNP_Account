@@ -2,40 +2,25 @@ package com.hyrt.cnp.account.manager;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.inject.Key;
 import com.hyrt.cnp.R;
-import com.hyrt.cnp.account.LoginActivity;
 import com.hyrt.cnp.account.model.UserDetail;
 import com.hyrt.cnp.account.request.UserDetailRequest;
-import com.hyrt.cnp.account.requestListener.LoginRequestListener;
 import com.hyrt.cnp.account.requestListener.UserDetailRequestListener;
 import com.hyrt.cnp.account.utils.FaceUtils;
 import com.jingdong.app.pad.product.drawable.HandlerRecycleBitmapDrawable;
 import com.jingdong.app.pad.utils.InflateUtil;
 import com.jingdong.common.frame.BaseActivity;
-import com.jingdong.common.http.HttpGroup;
-import com.jingdong.common.http.HttpGroupSetting;
 import com.jingdong.common.utils.cache.GlobalImageCache;
-import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
-import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 
 import net.oschina.app.AppContext;
 
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
-
-import roboguice.activity.RoboActivity;
 
 public class UserMainActivity extends BaseActivity {
 
@@ -57,25 +42,31 @@ public class UserMainActivity extends BaseActivity {
         findViewById(R.id.user_info).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(UserMainActivity.this,UserInfoActivity.class);
-                intent.putExtra("vo",userDetail);
-                startActivity(intent);
+                if(userDetail!=null){
+                    Intent intent = new Intent(UserMainActivity.this,UserInfoActivity.class);
+                    intent.putExtra("vo",userDetail);
+                    startActivity(intent);
+                }
             }
         });
         findViewById(R.id.update_face).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(UserMainActivity.this,UserFaceActivity.class);
-                intent.putExtra("vo",userDetail);
-                startActivityForResult(intent,UPDATE_FACE);
+                if(userDetail!=null){
+                    Intent intent = new Intent(UserMainActivity.this,UserFaceActivity.class);
+                    intent.putExtra("vo",userDetail);
+                    startActivityForResult(intent,UPDATE_FACE);
+                }
             }
         });
         findViewById(R.id.update_password).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(UserMainActivity.this,UserPasswordActivity.class);
-                intent.putExtra("vo",userDetail);
-                startActivity(intent);
+                if(userDetail!=null){
+                    Intent intent = new Intent(UserMainActivity.this,UserPasswordActivity.class);
+                    intent.putExtra("vo",userDetail);
+                    startActivity(intent);
+                }
             }
         });
     }
