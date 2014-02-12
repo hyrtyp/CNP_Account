@@ -1,10 +1,21 @@
 package com.hyrt.cnp.account.requestListener;
 
 import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.AsyncQueryHandler;
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.hyrt.cnp.R;
 import com.hyrt.cnp.account.AccountUtils;
+import com.hyrt.cnp.account.LoginActivity;
 import com.hyrt.cnp.account.model.BaseTest;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
@@ -31,8 +42,28 @@ public class UserPwdRequestListener extends BaseRequestListener{
         super.onRequestSuccess(baseTest);
         if(context != null && context.get()!=null){
             if(((BaseTest)baseTest).getCode().equals("200")){
-                AccountManager.get(context.get()).clearPassword(AccountUtils.getAccount(context.get()));
-                showMessage(R.string.pwd_msg_title, R.string.pwd_msg_content);
+                AccountManager.get(context.get()).removeAccount(AccountUtils.getAccount(context.get()),
+                        new AccountManagerCallback<Boolean>() {
+                            @Override
+                            public void run(AccountManagerFuture<Boolean> booleanAccountManagerFuture) {
+                                Intent intent = new Intent();
+                                intent.setClass(context.get(), LoginActivity.class);
+                                context.get().startActivity(intent);
+                            }
+                        }, new AsyncQueryHandler(new ContentResolver(context.get().getApplication()) {
+                            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+                            @Override
+                            public String[] getStreamTypes(Uri url, String mimeTypeFilter) {
+                                return super.getStreamTypes(url, mimeTypeFilter);
+                            }
+                        }) {
+                            @Override
+                            protected Handler createHandler(Looper looper) {
+                                return super.createHandler(looper);
+                            }
+                        }
+                );
+                //showMessage(R.string.pwd_msg_title, R.string.pwd_msg_content);
             }else{
                 showMessage(R.string.pwd_msg_title,R.string.pwd_msgerror_content);
             } 

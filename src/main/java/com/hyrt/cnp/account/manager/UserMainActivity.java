@@ -3,11 +3,13 @@ package com.hyrt.cnp.account.manager;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
+import android.annotation.TargetApi;
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -64,7 +66,7 @@ public class UserMainActivity extends BaseActivity {
                 if(userDetail!=null){
                     Intent intent = new Intent(UserMainActivity.this,UserFaceActivity.class);
                     intent.putExtra("vo",userDetail);
-                    startActivityForResult(intent,UPDATE_FACE);
+                    startActivityForResult(intent, UPDATE_FACE);
                 }
             }
         });
@@ -90,6 +92,7 @@ public class UserMainActivity extends BaseActivity {
                         startActivity(intent);
                     }
                 },new AsyncQueryHandler(new ContentResolver(getApplication()) {
+                            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
                             @Override
                             public String[] getStreamTypes(Uri url, String mimeTypeFilter) {
                                 return super.getStreamTypes(url, mimeTypeFilter);
