@@ -1,8 +1,10 @@
 package com.hyrt.cnp.account.requestListener;
 
+import android.accounts.AccountManager;
 import android.app.Activity;
 
 import com.hyrt.cnp.R;
+import com.hyrt.cnp.account.AccountUtils;
 import com.hyrt.cnp.account.model.BaseTest;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
@@ -29,7 +31,8 @@ public class UserPwdRequestListener extends BaseRequestListener{
         super.onRequestSuccess(baseTest);
         if(context != null && context.get()!=null){
             if(((BaseTest)baseTest).getCode().equals("200")){
-                showMessage(R.string.pwd_msg_title,R.string.pwd_msg_content);
+                AccountManager.get(context.get()).clearPassword(AccountUtils.getAccount(context.get()));
+                showMessage(R.string.pwd_msg_title, R.string.pwd_msg_content);
             }else{
                 showMessage(R.string.pwd_msg_title,R.string.pwd_msgerror_content);
             } 

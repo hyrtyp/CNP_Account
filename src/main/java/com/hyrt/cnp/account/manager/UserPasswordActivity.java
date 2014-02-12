@@ -1,13 +1,9 @@
 package com.hyrt.cnp.account.manager;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -18,11 +14,8 @@ import android.widget.TextView;
 
 import com.hyrt.cnp.R;
 import com.hyrt.cnp.account.model.UserDetail;
-import com.hyrt.cnp.account.request.UserDetailRequest;
 import com.hyrt.cnp.account.request.UserPwdRequest;
-import com.hyrt.cnp.account.requestListener.UserDetailRequestListener;
 import com.hyrt.cnp.account.requestListener.UserPwdRequestListener;
-import com.hyrt.cnp.account.utils.UITextUtils;
 import com.jingdong.common.frame.BaseActivity;
 import com.octo.android.robospice.persistence.DurationInMillis;
 
@@ -72,53 +65,41 @@ public class UserPasswordActivity extends BaseActivity{
                         TextView textView =  (TextView)linearLayout.findViewById(R.id.title);
                         textView.setTextColor(getResources().getColor(android.R.color.black));
                         editText.setEnabled(false);
-                    }
-                    linearLayout.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            EditText editText = (EditText) linearLayout.findViewById(R.id.content);
-                            if(position == 0){
-                                TextView textView =  (TextView)linearLayout.findViewById(R.id.title);
-                                textView.setTextColor(getResources().getColor(android.R.color.black));
-                                editText.setEnabled(false);
-                            }else{
-                                editText.requestFocus();
-                                editText.addTextChangedListener(new TextWatcher(){
+                    }else{
+                        EditText editText = (EditText) linearLayout.findViewById(R.id.content);
+                        editText.addTextChangedListener(new TextWatcher(){
 
-                                    @Override
-                                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                                    }
-
-                                    @Override
-                                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                                    }
-
-                                    @Override
-                                    public void afterTextChanged(Editable s) {
-                                        if(s.toString().length() == 0)
-                                            return;
-                                        switch (position){
-                                            case 1:
-                                                oldPassword.delete(0,oldPassword.length());
-                                                oldPassword.append(s.toString());
-                                                break;
-                                            case 2:
-                                                newPassword.delete(0, oldPassword.length());
-                                                newPassword.append(s.toString());
-                                                break;
-                                            case 3:
-                                                renewPassword.delete(0, oldPassword.length());
-                                                renewPassword.append(s.toString());
-                                                break;
-                                        }
-
-                                    }
-                                });
                             }
-                        }
-                    });
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                                switch (position){
+                                    case 1:
+                                        oldPassword.delete(0,oldPassword.length());
+                                        oldPassword.append(s.toString());
+                                        break;
+                                    case 2:
+                                        newPassword.delete(0, newPassword.length());
+                                        newPassword.append(s.toString());
+                                        break;
+                                    case 3:
+                                        renewPassword.delete(0, renewPassword.length());
+                                        renewPassword.append(s.toString());
+                                        break;
+                                }
+
+                            }
+                        });
+                    }
+
                 }
                 return linearLayout;
             }
@@ -144,8 +125,8 @@ public class UserPasswordActivity extends BaseActivity{
      * 获取数据
      */
     private void initData(){
-        UserPwdRequest userPwdRequest = new UserPwdRequest(this,oldPassword.toString(),
-                newPassword.toString(),renewPassword.toString());
+        UserPwdRequest userPwdRequest = new UserPwdRequest(this,"123",
+                "123456","123456");
         UserPwdRequestListener userPwdRequestListener = new UserPwdRequestListener(this);
         spiceManager.execute(userPwdRequest, userPwdRequest.createCacheKey(),
                 DurationInMillis.ONE_SECOND, userPwdRequestListener.start());

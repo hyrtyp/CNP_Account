@@ -1,12 +1,9 @@
 package com.hyrt.cnp.account.manager;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -17,9 +14,7 @@ import android.widget.SimpleAdapter;
 import com.hyrt.cnp.R;
 import com.hyrt.cnp.account.model.UserDetail;
 import com.hyrt.cnp.account.request.UserInfoUpdateRequest;
-import com.hyrt.cnp.account.request.UserPwdRequest;
 import com.hyrt.cnp.account.requestListener.UserInfoUpdateRequestListener;
-import com.hyrt.cnp.account.requestListener.UserPwdRequestListener;
 import com.jingdong.common.frame.BaseActivity;
 import com.octo.android.robospice.persistence.DurationInMillis;
 
@@ -86,11 +81,39 @@ public class UserInfoActivity extends BaseActivity {
             public View getView(final int position, View convertView, ViewGroup parent) {
                 final LinearLayout linearLayout = (LinearLayout) super.getView(position, convertView, parent);
                 if(linearLayout != null){
+                    final EditText editText = (EditText) linearLayout.findViewById(R.id.content);
+                    // TODO MODIFY USERINFO
+                    switch (position){//0-4不可以修改，5-6可以修改
+                        case 0:
+                            editText.setEnabled(false);
+                            editText.setFocusable(false);
+                            break;
+                        case 1:
+                            editText.setEnabled(false);
+                            editText.setFocusable(false);
+                            break;
+                        case 2:
+                            editText.setEnabled(false);
+                            editText.setFocusable(false);
+                            break;
+                        case 3:
+                            editText.setEnabled(false);
+                            editText.setFocusable(false);
+                            break;
+                        case 4:
+                            editText.setEnabled(false);
+                            editText.setFocusable(false);
+                            break;
+                        case 5:
+                            editText.requestFocus();
+                            break;
+                        case 6:
+                            editText.requestFocus();
+                            break;
+                    }
                     linearLayout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            EditText editText = (EditText) linearLayout.findViewById(R.id.content);
-                            editText.requestFocus();
                             editText.addTextChangedListener(new TextWatcher(){
 
                                 @Override
@@ -108,26 +131,26 @@ public class UserInfoActivity extends BaseActivity {
                                     if(s.toString().length() == 0)
                                         return;
                                     switch (position){
-                                        case 0:
-                                            renname.delete(0,renname.length());
-                                            renname.append(s.toString());
-                                            break;
-                                        case 1:
-                                            birthday.delete(0,birthday.length());
-                                            birthday.append(s.toString());
-                                            break;
-                                        case 2:
-                                            className.delete(0, className.length());
-                                            className.append(s.toString());
-                                            break;
-                                        case 3:
-                                            nurseryName.delete(0, nurseryName.length());
-                                            nurseryName.append(s.toString());
-                                            break;
-                                        case 4:
-                                            sex.delete(0,sex.length());
-                                            sex.append(s.toString());
-                                            break;
+//                                        case 0:
+//                                            renname.delete(0,renname.length());
+//                                            renname.append(s.toString());
+//                                            break;
+//                                        case 1:
+//                                            birthday.delete(0,birthday.length());
+//                                            birthday.append(s.toString());
+//                                            break;
+//                                        case 2:
+//                                            className.delete(0, className.length());
+//                                            className.append(s.toString());
+//                                            break;
+//                                        case 3:
+//                                            nurseryName.delete(0, nurseryName.length());
+//                                            nurseryName.append(s.toString());
+//                                            break;
+//                                        case 4:
+//                                            sex.delete(0,sex.length());
+//                                            sex.append(s.toString());
+//                                            break;
                                         case 5:
                                             national.delete(0,national.length());
                                             national.append(s.toString());

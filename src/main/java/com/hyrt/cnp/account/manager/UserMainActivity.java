@@ -101,7 +101,7 @@ public class UserMainActivity extends BaseActivity {
         ((TextView) findViewById(R.id.name_tv)).setText(userDetail.getData().getRenname());
         HandlerRecycleBitmapDrawable localHandlerRecycleBitmapDrawable = new HandlerRecycleBitmapDrawable(null, this);
         imageView.setImageDrawable(localHandlerRecycleBitmapDrawable);
-        localBitmapDigest = new GlobalImageCache.BitmapDigest(facePath);
+        localBitmapDigest = new GlobalImageCache.BitmapDigest(facePath+"?time="+userDetail.getData().getLogo());
         localBitmapDigest.setWidth(imageView.getWidth());
         localBitmapDigest.setHeight(imageView.getHeight());
         Bitmap localBitmap = InflateUtil.loadImageWithCache(localBitmapDigest);
