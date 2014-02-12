@@ -1,10 +1,7 @@
 package com.hyrt.cnp.account.requestListener;
 
 import android.app.Activity;
-import android.content.Intent;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.hyrt.cnp.R;
 import com.hyrt.cnp.account.manager.UserMainActivity;
 import com.hyrt.cnp.account.model.UserDetail;
@@ -37,7 +34,9 @@ public class UserDetailRequestListener extends BaseRequestListener{
         if(context != null && context.get()!=null){
             if(context.get() instanceof  UserMainActivity){
                 UserMainActivity userMainActivity = (UserMainActivity) context.get();
-                userMainActivity.updateUI((UserDetail.UserDetailModel)userDetail);
+                if(userDetail!=null){
+                    userMainActivity.updateUI((UserDetail.UserDetailModel)userDetail);
+                }
             }
         }
     }
