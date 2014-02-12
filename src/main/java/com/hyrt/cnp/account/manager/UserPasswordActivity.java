@@ -60,42 +60,46 @@ public class UserPasswordActivity extends BaseActivity{
             public View getView(final int position, View convertView, ViewGroup parent) {
                 final LinearLayout linearLayout = (LinearLayout) super.getView(position, convertView, parent);
                 if(linearLayout != null){
+                    EditText editText = (EditText) linearLayout.findViewById(R.id.content);
                     if(position == 0){
-                        EditText editText = (EditText) linearLayout.findViewById(R.id.content);
                         TextView textView =  (TextView)linearLayout.findViewById(R.id.title);
                         textView.setTextColor(getResources().getColor(android.R.color.black));
                         editText.setEnabled(false);
                     }else{
-                        EditText editText = (EditText) linearLayout.findViewById(R.id.content);
-                        editText.addTextChangedListener(new TextWatcher(){
-
+                        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                             @Override
-                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            public void onFocusChange(View v, boolean hasFocus) {
+                                EditText editText = (EditText) linearLayout.findViewById(R.id.content);
+                                editText.addTextChangedListener(new TextWatcher(){
 
-                            }
+                                    @Override
+                                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                            @Override
-                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                    }
 
-                            }
+                                    @Override
+                                    public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                            @Override
-                            public void afterTextChanged(Editable s) {
-                                switch (position){
-                                    case 1:
-                                        oldPassword.delete(0,oldPassword.length());
-                                        oldPassword.append(s.toString());
-                                        break;
-                                    case 2:
-                                        newPassword.delete(0, newPassword.length());
-                                        newPassword.append(s.toString());
-                                        break;
-                                    case 3:
-                                        renewPassword.delete(0, renewPassword.length());
-                                        renewPassword.append(s.toString());
-                                        break;
-                                }
+                                    }
 
+                                    @Override
+                                    public void afterTextChanged(Editable s) {
+                                        switch (position){
+                                            case 1:
+                                                oldPassword.delete(0,oldPassword.length());
+                                                oldPassword.append(s.toString());
+                                                break;
+                                            case 2:
+                                                newPassword.delete(0, newPassword.length());
+                                                newPassword.append(s.toString());
+                                                break;
+                                            case 3:
+                                                renewPassword.delete(0, renewPassword.length());
+                                                renewPassword.append(s.toString());
+                                                break;
+                                        }
+                                    }
+                                });
                             }
                         });
                     }
@@ -125,8 +129,8 @@ public class UserPasswordActivity extends BaseActivity{
      * 获取数据
      */
     private void initData(){
-        UserPwdRequest userPwdRequest = new UserPwdRequest(this,"123",
-                "123456","123456");
+        UserPwdRequest userPwdRequest = new UserPwdRequest(this,oldPassword.toString(),
+                newPassword.toString(),renewPassword.toString());
         UserPwdRequestListener userPwdRequestListener = new UserPwdRequestListener(this);
         spiceManager.execute(userPwdRequest, userPwdRequest.createCacheKey(),
                 DurationInMillis.ONE_SECOND, userPwdRequestListener.start());
