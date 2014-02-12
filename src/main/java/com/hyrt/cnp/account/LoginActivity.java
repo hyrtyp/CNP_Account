@@ -2,17 +2,13 @@ package com.hyrt.cnp.account;
 
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
-import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
-import static android.accounts.AccountManager.KEY_AUTHTOKEN;
-import static com.hyrt.cnp.account.AccountConstants.ACCOUNT_TYPE;
 import android.widget.Button;
 import android.widget.EditText;
+
 import com.hyrt.cnp.R;
 import com.hyrt.cnp.account.model.User;
 import com.hyrt.cnp.account.request.AuthenticatorRequest;
@@ -20,6 +16,11 @@ import com.hyrt.cnp.account.requestListener.LoginRequestListener;
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
+
+import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
+import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
+import static android.accounts.AccountManager.KEY_AUTHTOKEN;
+import static com.hyrt.cnp.account.AccountConstants.ACCOUNT_TYPE;
 
 public class LoginActivity extends AccountAuthenticatorActivity {
 

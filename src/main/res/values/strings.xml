@@ -12,6 +12,7 @@
     <string name="face">上传头像</string>
     <string name="update_password">修改密码</string>
     <string name="update_info">修改资料</string>
+    <string name="userout">退出当前账户</string>
 
 
     <string name="user_login_pg">登陆中…</string>

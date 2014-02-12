@@ -77,6 +77,10 @@
 
     </RelativeLayout>
 
-
+    <Button
+        style="@style/Button"
+        android:layout_below="@+id/user_info_listview"
+        android:text="@string/userout"
+        android:id="@+id/userout_btn" />
 
 </LinearLayout>

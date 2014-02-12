@@ -1,13 +1,23 @@
 package com.hyrt.cnp.account.manager;
 
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.content.AsyncQueryHandler;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hyrt.cnp.R;
+import com.hyrt.cnp.account.AccountUtils;
+import com.hyrt.cnp.account.LoginActivity;
 import com.hyrt.cnp.account.model.UserDetail;
 import com.hyrt.cnp.account.request.UserDetailRequest;
 import com.hyrt.cnp.account.requestListener.UserDetailRequestListener;
@@ -16,7 +26,6 @@ import com.jingdong.app.pad.product.drawable.HandlerRecycleBitmapDrawable;
 import com.jingdong.app.pad.utils.InflateUtil;
 import com.jingdong.common.frame.BaseActivity;
 import com.jingdong.common.utils.cache.GlobalImageCache;
-import com.octo.android.robospice.persistence.DurationInMillis;
 
 import net.oschina.app.AppContext;
 
@@ -69,6 +78,30 @@ public class UserMainActivity extends BaseActivity {
                 }
             }
         });
+        findViewById(R.id.userout_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AccountManager.get(UserMainActivity.this).removeAccount(AccountUtils.getAccount(UserMainActivity.this),
+                        new AccountManagerCallback<Boolean>() {
+                    @Override
+                    public void run(AccountManagerFuture<Boolean> booleanAccountManagerFuture) {
+                        Intent intent = new Intent();
+                        intent.setClass(UserMainActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                    }
+                },new AsyncQueryHandler(new ContentResolver(getApplication()) {
+                            @Override
+                            public String[] getStreamTypes(Uri url, String mimeTypeFilter) {
+                                return super.getStreamTypes(url, mimeTypeFilter);
+                            }
+                        }) {
+                            @Override
+                            protected Handler createHandler(Looper looper) {
+                                return super.createHandler(looper);
+                            }
+                        });
+            }
+        });
     }
 
     @Override
@@ -85,7 +118,7 @@ public class UserMainActivity extends BaseActivity {
         UserDetailRequest userDetailRequest = new UserDetailRequest(this);
         UserDetailRequestListener userDetailRequestListener = new UserDetailRequestListener(this);
         spiceManager.execute(userDetailRequest, userDetailRequest.createCacheKey(),
-                DurationInMillis.ONE_MINUTE, userDetailRequestListener.start());
+                1000, userDetailRequestListener.start());
     }
 
     /**
