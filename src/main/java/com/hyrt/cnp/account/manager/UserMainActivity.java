@@ -56,6 +56,7 @@ public class UserMainActivity extends BaseActivity {
                 if(userDetail!=null){
                     Intent intent = new Intent(UserMainActivity.this,UserInfoActivity.class);
                     intent.putExtra("vo",userDetail);
+                    intent.putExtra("mybabayinfo",true);
                     startActivity(intent);
                 }
             }
@@ -83,7 +84,8 @@ public class UserMainActivity extends BaseActivity {
         findViewById(R.id.userout_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AccountManager.get(UserMainActivity.this).removeAccount(AccountUtils.getAccount(UserMainActivity.this),
+                AccountManager.get(UserMainActivity.this).removeAccount(
+                        AccountUtils.getAccount(UserMainActivity.this),
                         new AccountManagerCallback<Boolean>() {
                     @Override
                     public void run(AccountManagerFuture<Boolean> booleanAccountManagerFuture) {

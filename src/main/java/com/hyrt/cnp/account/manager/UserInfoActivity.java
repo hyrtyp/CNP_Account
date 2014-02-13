@@ -36,6 +36,7 @@ public class UserInfoActivity extends BaseActivity {
     private StringBuilder national  = new StringBuilder();
     private StringBuilder bloodType  = new StringBuilder();
 
+    private boolean mybabayinfo=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class UserInfoActivity extends BaseActivity {
         setContentView(R.layout.user_info);
         UserDetail.UserDetailModel userDetailModel =
                 (UserDetail.UserDetailModel) getIntent().getSerializableExtra("vo");
+        mybabayinfo=getIntent().getBooleanExtra("mybabayinfo",true);
         List<Map<String,String>> values = new ArrayList<Map<String,String>>();
         Map<String,String> item1 = new HashMap<String, String>();
         item1.put("title","宝宝姓名");
@@ -105,16 +107,28 @@ public class UserInfoActivity extends BaseActivity {
                             editText.setFocusable(false);
                             break;
                         case 5:
-                            editText.requestFocus();
+                            if(mybabayinfo){
+                                editText.requestFocus();
+                            }else{
+                                editText.setEnabled(false);
+                                editText.setFocusable(false);
+                            }
+
                             break;
                         case 6:
-                            editText.requestFocus();
+                            if(mybabayinfo){
+                                editText.requestFocus();
+                            }else{
+                                editText.setEnabled(false);
+                                editText.setFocusable(false);
+                            }
                             break;
                     }
-                    linearLayout.setOnClickListener(new View.OnClickListener() {
+                    editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
                         @Override
-                        public void onClick(View v) {
-                            editText.addTextChangedListener(new TextWatcher(){
+                        public void onFocusChange(View view, boolean b) {
+                            editText.addTextChangedListener(new TextWatcher() {
 
                                 @Override
                                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -128,35 +142,15 @@ public class UserInfoActivity extends BaseActivity {
 
                                 @Override
                                 public void afterTextChanged(Editable s) {
-                                    if(s.toString().length() == 0)
+                                    if (s.toString().length() == 0)
                                         return;
-                                    switch (position){
-//                                        case 0:
-//                                            renname.delete(0,renname.length());
-//                                            renname.append(s.toString());
-//                                            break;
-//                                        case 1:
-//                                            birthday.delete(0,birthday.length());
-//                                            birthday.append(s.toString());
-//                                            break;
-//                                        case 2:
-//                                            className.delete(0, className.length());
-//                                            className.append(s.toString());
-//                                            break;
-//                                        case 3:
-//                                            nurseryName.delete(0, nurseryName.length());
-//                                            nurseryName.append(s.toString());
-//                                            break;
-//                                        case 4:
-//                                            sex.delete(0,sex.length());
-//                                            sex.append(s.toString());
-//                                            break;
+                                    switch (position) {
                                         case 5:
-                                            national.delete(0,national.length());
+                                            national.delete(0, national.length());
                                             national.append(s.toString());
                                             break;
                                         case 6:
-                                            bloodType.delete(0,bloodType.length());
+                                            bloodType.delete(0, bloodType.length());
                                             bloodType.append(s.toString());
                                             break;
                                     }
@@ -169,12 +163,17 @@ public class UserInfoActivity extends BaseActivity {
                 return linearLayout;
             }
         });
-        findViewById(R.id.userinfo_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                initData();
-            }
-        });
+        if (mybabayinfo){
+            findViewById(R.id.userinfo_btn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    initData();
+                }
+            });
+        }else{
+            findViewById(R.id.userinfo_btn).setVisibility(View.GONE);
+        }
+
     }
 
     @Override

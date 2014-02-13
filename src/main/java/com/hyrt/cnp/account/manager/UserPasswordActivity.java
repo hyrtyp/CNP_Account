@@ -65,6 +65,7 @@ public class UserPasswordActivity extends BaseActivity{
                         TextView textView =  (TextView)linearLayout.findViewById(R.id.title);
                         textView.setTextColor(getResources().getColor(android.R.color.black));
                         editText.setEnabled(false);
+
                     }else{
                         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                             @Override

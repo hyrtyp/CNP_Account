@@ -3,7 +3,9 @@ package com.hyrt.cnp.account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -39,7 +41,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
      */
     protected boolean requestNewAccount = true;
     private String username = "slerman@163.com";
-    private String password = "1";
+    private String password = "123456";
     private String authTokenType;
 
     private AccountManager accountManager;
@@ -127,5 +129,31 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         finish();
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if(notSupportKeyCodeBack()){
+               // exitApp(); // 退出应用处理
+            } else {
+                // 返回桌面,经测试,有一些手机不支持,查看 notSupportKeyCodeBack 方法
+                Intent i= new Intent(Intent.ACTION_MAIN);
+                i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                i.addCategory(Intent.CATEGORY_HOME);
+                startActivity(i);
+                return false;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
+
+    /**
+     * 测试手机是否支持返回到桌面
+     * */
+    private boolean notSupportKeyCodeBack(){
+        if("3GW100".equals(Build.MODEL)|| "3GW101".equals(Build.MODEL) || "3GC101".equals (Build.MODEL)) {
+            return true;
+        }
+        return false;
+    }
 }
