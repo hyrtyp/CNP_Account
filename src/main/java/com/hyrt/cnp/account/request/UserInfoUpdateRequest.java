@@ -3,7 +3,6 @@ package com.hyrt.cnp.account.request;
 import android.content.Context;
 
 import com.google.inject.Inject;
-import com.hyrt.cnp.account.manager.UserInfoActivity;
 import com.hyrt.cnp.account.model.BaseTest;
 import com.hyrt.cnp.account.service.UserService;
 
@@ -20,19 +19,23 @@ public class UserInfoUpdateRequest extends BaseRequest{
     private String sex;
     private String national;
     private String bloodType;
+    private String ethnic;
 
-    public UserInfoUpdateRequest(Context context, String renname, String birthday,String sex, String national, String bloodType) {
+    public UserInfoUpdateRequest(Context context,
+                                 String renname, String birthday,
+                                 String sex, String national, String bloodType,String ethnic) {
         super(BaseTest.class,context);
         this.renname = renname;
         this.birthday = birthday;
         this.sex = sex;
         this.national = national;
         this.bloodType = bloodType;
+        this.ethnic=ethnic;
     }
 
     @Override
     public BaseTest run() {
-        return userService.modifyUserInfo(renname, birthday, sex, national, bloodType);
+        return userService.modifyUserInfo(renname, birthday, sex, national, bloodType,ethnic);
     }
 
     /**
