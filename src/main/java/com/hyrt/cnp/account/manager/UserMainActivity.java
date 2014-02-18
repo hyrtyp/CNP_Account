@@ -132,7 +132,7 @@ public class UserMainActivity extends BaseActivity {
      */
     public void updateUI(UserDetail.UserDetailModel userDetail) {
         this.userDetail = userDetail;
-        String facePath = FaceUtils.getAvatar(userDetail.getData().getUser_id(),FaceUtils.FACE_SMALL);
+        String facePath = FaceUtils.getAvatar(userDetail.getData().getUser_id(),FaceUtils.FACE_BIG);
         ImageView imageView = (ImageView)findViewById(R.id.user_face);
         weakImageView = new WeakReference<ImageView>(imageView);
         ((TextView) findViewById(R.id.class_tv)).setText(userDetail.getData().getNurseryName());
@@ -182,14 +182,7 @@ public class UserMainActivity extends BaseActivity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        AppContext.getInstance().setBaseActivity(this);
-        if(resultCode == 1 && requestCode == UPDATE_FACE){
-            if(weakImageView.get() != null){
-                weakImageView.get().setImageDrawable(null);
-            }
-            GlobalImageCache.getLruBitmapCache().get(localBitmapDigest).recycle();
-            GlobalImageCache.remove(localBitmapDigest);
-        }
+
     }
 
 
