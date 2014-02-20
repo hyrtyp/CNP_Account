@@ -92,6 +92,7 @@ public class UserMainActivity extends BaseActivity {
                         Intent intent = new Intent();
                         intent.setClass(UserMainActivity.this, LoginActivity.class);
                         startActivity(intent);
+                        finish();
                     }
                 },new AsyncQueryHandler(new ContentResolver(getApplication()) {
                             @TargetApi(Build.VERSION_CODES.HONEYCOMB)
