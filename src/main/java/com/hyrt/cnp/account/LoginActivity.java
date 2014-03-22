@@ -11,10 +11,9 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.hyrt.cnp.R;
-import com.hyrt.cnp.account.model.User;
 import com.hyrt.cnp.account.request.AuthenticatorRequest;
 import com.hyrt.cnp.account.requestListener.LoginRequestListener;
+import com.hyrt.cnp.base.account.model.User;
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
@@ -22,7 +21,7 @@ import com.octo.android.robospice.persistence.DurationInMillis;
 import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
 import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
 import static android.accounts.AccountManager.KEY_AUTHTOKEN;
-import static com.hyrt.cnp.account.AccountConstants.ACCOUNT_TYPE;
+import static com.hyrt.cnp.base.account.AccountConstants.ACCOUNT_TYPE;
 
 public class LoginActivity extends AccountAuthenticatorActivity {
 

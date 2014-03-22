@@ -3,15 +3,16 @@ package com.hyrt.cnp.account.request;
 import android.content.Context;
 
 import com.google.inject.Inject;
-import com.hyrt.cnp.account.model.BaseTest;
-import com.hyrt.cnp.account.service.UserService;
+import com.hyrt.cnp.base.account.model.BaseTest;
+import com.hyrt.cnp.base.account.request.BaseRequest;
+import com.hyrt.cnp.base.account.service.UserService;
 
 import java.io.File;
 
 /**
  * Created by yepeng on 14-1-3.
  */
-public class UserFaceBgRequest extends BaseRequest{
+public class UserFaceBgRequest extends BaseRequest {
 
     @Inject
     private UserService userService;

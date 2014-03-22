@@ -2,9 +2,10 @@ package com.hyrt.cnp.account.requestListener;
 
 import android.app.Activity;
 
-import com.hyrt.cnp.R;
+import com.hyrt.cnp.account.R;
 import com.hyrt.cnp.account.manager.UserInfoActivity;
-import com.hyrt.cnp.account.model.UtilVar;
+import com.hyrt.cnp.base.account.model.UtilVar;
+import com.hyrt.cnp.base.account.requestListener.BaseRequestListener;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
 import roboguice.RoboGuice;
@@ -12,7 +13,7 @@ import roboguice.RoboGuice;
 /**
  * Created by yepeng on 14-1-9.
  */
-public class UserVarRequestListener extends BaseRequestListener{
+public class UserVarRequestListener extends BaseRequestListener {
 
 
     /**

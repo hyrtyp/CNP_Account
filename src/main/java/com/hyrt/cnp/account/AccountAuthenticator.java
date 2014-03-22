@@ -26,20 +26,14 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.hyrt.cnp.account.model.User;
-import com.hyrt.cnp.account.service.UserService;
+import com.hyrt.cnp.base.account.model.User;
 
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 import static android.accounts.AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE;
 import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
@@ -47,7 +41,7 @@ import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
 import static android.accounts.AccountManager.KEY_AUTHTOKEN;
 import static android.accounts.AccountManager.KEY_BOOLEAN_RESULT;
 import static android.accounts.AccountManager.KEY_INTENT;
-import static com.hyrt.cnp.account.AccountConstants.ACCOUNT_TYPE;
+import static com.hyrt.cnp.base.account.AccountConstants.ACCOUNT_TYPE;
 import static com.hyrt.cnp.account.LoginActivity.PARAM_AUTHTOKEN_TYPE;
 import static com.hyrt.cnp.account.LoginActivity.PARAM_USERNAME;
 

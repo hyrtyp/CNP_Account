@@ -13,16 +13,17 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.hyrt.cnp.R;
-import com.hyrt.cnp.account.AccountUtils;
+import com.hyrt.cnp.account.R;
 import com.hyrt.cnp.account.LoginActivity;
-import com.hyrt.cnp.account.model.BaseTest;
+import com.hyrt.cnp.base.account.AccountUtils;
+import com.hyrt.cnp.base.account.model.BaseTest;
+import com.hyrt.cnp.base.account.requestListener.BaseRequestListener;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
 /**
  * Created by yepeng on 14-1-9.
  */
-public class UserPwdRequestListener extends BaseRequestListener{
+public class UserPwdRequestListener extends BaseRequestListener {
     /**
      * @param context
      */

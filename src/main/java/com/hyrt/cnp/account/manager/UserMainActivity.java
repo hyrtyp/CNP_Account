@@ -17,13 +17,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.hyrt.cnp.R;
-import com.hyrt.cnp.account.AccountUtils;
+import com.hyrt.cnp.account.R;
+import com.hyrt.cnp.base.account.AccountUtils;
 import com.hyrt.cnp.account.LoginActivity;
-import com.hyrt.cnp.account.model.UserDetail;
+import com.hyrt.cnp.base.account.model.UserDetail;
 import com.hyrt.cnp.account.request.UserDetailRequest;
 import com.hyrt.cnp.account.requestListener.UserDetailRequestListener;
-import com.hyrt.cnp.account.utils.FaceUtils;
+import com.hyrt.cnp.base.account.utils.FaceUtils;
 import com.jingdong.app.pad.product.drawable.HandlerRecycleBitmapDrawable;
 import com.jingdong.app.pad.utils.InflateUtil;
 import com.jingdong.common.frame.BaseActivity;

@@ -12,8 +12,8 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import com.hyrt.cnp.R;
-import com.hyrt.cnp.account.model.UserDetail;
+import com.hyrt.cnp.account.R;
+import com.hyrt.cnp.base.account.model.UserDetail;
 import com.hyrt.cnp.account.request.UserPwdRequest;
 import com.hyrt.cnp.account.requestListener.UserPwdRequestListener;
 import com.jingdong.common.frame.BaseActivity;

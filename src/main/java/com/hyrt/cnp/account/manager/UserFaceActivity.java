@@ -7,13 +7,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.hyrt.cnp.R;
-import com.hyrt.cnp.account.model.UserDetail;
+import com.hyrt.cnp.account.R;
+import com.hyrt.cnp.base.account.model.UserDetail;
 import com.hyrt.cnp.account.request.UserFaceRequest;
 import com.hyrt.cnp.account.requestListener.UserFaceRequestListener;
-import com.hyrt.cnp.account.utils.FaceUtils;
-import com.hyrt.cnp.account.utils.FileUtils;
-import com.hyrt.cnp.account.utils.PhotoUpload;
+import com.hyrt.cnp.base.account.utils.FaceUtils;
+import com.hyrt.cnp.base.account.utils.FileUtils;
+import com.hyrt.cnp.base.account.utils.PhotoUpload;
 import com.jingdong.app.pad.product.drawable.HandlerRecycleBitmapDrawable;
 import com.jingdong.app.pad.utils.InflateUtil;
 import com.jingdong.common.frame.BaseActivity;
