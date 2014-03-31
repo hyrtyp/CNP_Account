@@ -1,41 +1,37 @@
 package com.hyrt.cnp.account.manager;
 
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.annotation.TargetApi;
+import android.content.AsyncQueryHandler;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.os.Build;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.inject.Key;
-import com.hyrt.cnp.R;
+import com.hyrt.cnp.account.R;
+import com.hyrt.cnp.base.account.AccountUtils;
 import com.hyrt.cnp.account.LoginActivity;
-import com.hyrt.cnp.account.model.UserDetail;
+import com.hyrt.cnp.base.account.model.UserDetail;
 import com.hyrt.cnp.account.request.UserDetailRequest;
-import com.hyrt.cnp.account.requestListener.LoginRequestListener;
 import com.hyrt.cnp.account.requestListener.UserDetailRequestListener;
-import com.hyrt.cnp.account.utils.FaceUtils;
+import com.hyrt.cnp.base.account.utils.FaceUtils;
 import com.jingdong.app.pad.product.drawable.HandlerRecycleBitmapDrawable;
 import com.jingdong.app.pad.utils.InflateUtil;
 import com.jingdong.common.frame.BaseActivity;
-import com.jingdong.common.http.HttpGroup;
-import com.jingdong.common.http.HttpGroupSetting;
 import com.jingdong.common.utils.cache.GlobalImageCache;
-import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
-import com.octo.android.robospice.SpiceManager;
-import com.octo.android.robospice.persistence.DurationInMillis;
 
 import net.oschina.app.AppContext;
 
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
-
-import roboguice.activity.RoboActivity;
 
 public class UserMainActivity extends BaseActivity {
 
@@ -57,25 +53,59 @@ public class UserMainActivity extends BaseActivity {
         findViewById(R.id.user_info).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(UserMainActivity.this,UserInfoActivity.class);
-                intent.putExtra("vo",userDetail);
-                startActivity(intent);
+                if(userDetail!=null){
+                    Intent intent = new Intent(UserMainActivity.this,UserInfoActivity.class);
+                    intent.putExtra("vo",userDetail);
+                    intent.putExtra("mybabayinfo",true);
+                    startActivity(intent);
+                }
             }
         });
         findViewById(R.id.update_face).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(UserMainActivity.this,UserFaceActivity.class);
-                intent.putExtra("vo",userDetail);
-                startActivityForResult(intent,UPDATE_FACE);
+                if(userDetail!=null){
+                    Intent intent = new Intent(UserMainActivity.this,UserFaceActivity.class);
+                    intent.putExtra("vo",userDetail);
+                    startActivityForResult(intent, UPDATE_FACE);
+                }
             }
         });
         findViewById(R.id.update_password).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(UserMainActivity.this,UserPasswordActivity.class);
-                intent.putExtra("vo",userDetail);
-                startActivity(intent);
+                if(userDetail!=null){
+                    Intent intent = new Intent(UserMainActivity.this,UserPasswordActivity.class);
+                    intent.putExtra("vo",userDetail);
+                    startActivity(intent);
+                }
+            }
+        });
+        findViewById(R.id.userout_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AccountManager.get(UserMainActivity.this).removeAccount(
+                        AccountUtils.getAccount(UserMainActivity.this),
+                        new AccountManagerCallback<Boolean>() {
+                    @Override
+                    public void run(AccountManagerFuture<Boolean> booleanAccountManagerFuture) {
+                        Intent intent = new Intent();
+                        intent.setClass(UserMainActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                },new AsyncQueryHandler(new ContentResolver(getApplication()) {
+                            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+                            @Override
+                            public String[] getStreamTypes(Uri url, String mimeTypeFilter) {
+                                return super.getStreamTypes(url, mimeTypeFilter);
+                            }
+                        }) {
+                            @Override
+                            protected Handler createHandler(Looper looper) {
+                                return super.createHandler(looper);
+                            }
+                        });
             }
         });
     }
@@ -94,7 +124,7 @@ public class UserMainActivity extends BaseActivity {
         UserDetailRequest userDetailRequest = new UserDetailRequest(this);
         UserDetailRequestListener userDetailRequestListener = new UserDetailRequestListener(this);
         spiceManager.execute(userDetailRequest, userDetailRequest.createCacheKey(),
-                DurationInMillis.ONE_MINUTE, userDetailRequestListener.start());
+                1000, userDetailRequestListener.start());
     }
 
     /**
@@ -103,14 +133,14 @@ public class UserMainActivity extends BaseActivity {
      */
     public void updateUI(UserDetail.UserDetailModel userDetail) {
         this.userDetail = userDetail;
-        String facePath = FaceUtils.getAvatar(userDetail.getData().getUser_id(),FaceUtils.FACE_SMALL);
+        String facePath = FaceUtils.getAvatar(userDetail.getData().getUser_id(),FaceUtils.FACE_BIG);
         ImageView imageView = (ImageView)findViewById(R.id.user_face);
         weakImageView = new WeakReference<ImageView>(imageView);
         ((TextView) findViewById(R.id.class_tv)).setText(userDetail.getData().getNurseryName());
         ((TextView) findViewById(R.id.name_tv)).setText(userDetail.getData().getRenname());
         HandlerRecycleBitmapDrawable localHandlerRecycleBitmapDrawable = new HandlerRecycleBitmapDrawable(null, this);
         imageView.setImageDrawable(localHandlerRecycleBitmapDrawable);
-        localBitmapDigest = new GlobalImageCache.BitmapDigest(facePath);
+        localBitmapDigest = new GlobalImageCache.BitmapDigest(facePath+"?time="+userDetail.getData().getLogo());
         localBitmapDigest.setWidth(imageView.getWidth());
         localBitmapDigest.setHeight(imageView.getHeight());
         Bitmap localBitmap = InflateUtil.loadImageWithCache(localBitmapDigest);
@@ -153,14 +183,7 @@ public class UserMainActivity extends BaseActivity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        AppContext.getInstance().setBaseActivity(this);
-        if(resultCode == 1 && requestCode == UPDATE_FACE){
-            if(weakImageView.get() != null){
-                weakImageView.get().setImageDrawable(null);
-            }
-            GlobalImageCache.getLruBitmapCache().get(localBitmapDigest).recycle();
-            GlobalImageCache.remove(localBitmapDigest);
-        }
+
     }
 
 

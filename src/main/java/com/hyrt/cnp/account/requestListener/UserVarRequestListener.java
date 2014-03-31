@@ -3,8 +3,8 @@ package com.hyrt.cnp.account.requestListener;
 import android.app.Activity;
 
 import com.hyrt.cnp.account.R;
-import com.hyrt.cnp.account.manager.UserMainActivity;
-import com.hyrt.cnp.base.account.model.UserDetail;
+import com.hyrt.cnp.account.manager.UserInfoActivity;
+import com.hyrt.cnp.base.account.model.UtilVar;
 import com.hyrt.cnp.base.account.requestListener.BaseRequestListener;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
@@ -13,15 +13,18 @@ import roboguice.RoboGuice;
 /**
  * Created by yepeng on 14-1-9.
  */
-public class UserDetailRequestListener extends BaseRequestListener {
+public class UserVarRequestListener extends BaseRequestListener {
 
 
     /**
      * @param context
      */
-    public UserDetailRequestListener(Activity context) {
+
+    private String var;
+    public UserVarRequestListener(Activity context,String var) {
         super(context);
         RoboGuice.getInjector(context).injectMembers(this);
+        this.var=var;
     }
 
     @Override
@@ -32,18 +35,21 @@ public class UserDetailRequestListener extends BaseRequestListener {
     @Override
     public void onRequestSuccess(Object userDetail) {
         super.onRequestSuccess(userDetail);
-        if(context != null && context.get()!=null){
-            if(context.get() instanceof  UserMainActivity){
-                UserMainActivity userMainActivity = (UserMainActivity) context.get();
-                if(userDetail!=null){
-                    userMainActivity.updateUI((UserDetail.UserDetailModel)userDetail);
-                }
+        UserInfoActivity activity = (UserInfoActivity)context.get();
+        UtilVar result= (UtilVar)userDetail;
+        if(userDetail!=null){
+            if(var.equals("nationality")){
+                activity.SetVar_nationality(result.getData());
+            }else if(var.equals("ethnic")){
+                activity.SetVar_ethnic(result.getData());
+            }else if(var.equals("bloodType")){
+                activity.SetVar_bloodType(result.getData());
             }
         }
     }
 
     @Override
-    public UserDetailRequestListener start() {
+    public UserVarRequestListener start() {
         showIndeterminate(R.string.user_info_pg);
         return this;
     }

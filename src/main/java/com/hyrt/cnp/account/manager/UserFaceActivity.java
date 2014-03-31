@@ -4,34 +4,25 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.hyrt.cnp.R;
-import com.hyrt.cnp.account.model.UserDetail;
+import com.hyrt.cnp.account.R;
+import com.hyrt.cnp.base.account.model.UserDetail;
 import com.hyrt.cnp.account.request.UserFaceRequest;
 import com.hyrt.cnp.account.requestListener.UserFaceRequestListener;
-import com.hyrt.cnp.account.utils.FaceUtils;
-import com.hyrt.cnp.account.utils.FileUtils;
-import com.hyrt.cnp.account.utils.PhotoUpload;
+import com.hyrt.cnp.base.account.utils.FaceUtils;
+import com.hyrt.cnp.base.account.utils.FileUtils;
+import com.hyrt.cnp.base.account.utils.PhotoUpload;
 import com.jingdong.app.pad.product.drawable.HandlerRecycleBitmapDrawable;
 import com.jingdong.app.pad.utils.InflateUtil;
 import com.jingdong.common.frame.BaseActivity;
 import com.jingdong.common.utils.cache.GlobalImageCache;
-import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
-import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.lang.ref.WeakReference;
-
-import roboguice.activity.RoboActivity;
 
 public class UserFaceActivity extends BaseActivity {
 
@@ -49,7 +40,7 @@ public class UserFaceActivity extends BaseActivity {
         findViewById(R.id.upload_face).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                faceFile = Uri.fromFile(FileUtils.createFile("cnp", "face.jpg"));
+                faceFile = Uri.fromFile(FileUtils.createFile("cnp", "face.png"));
                 photoUpload = new PhotoUpload(UserFaceActivity.this, faceFile);
                 photoUpload.choiceItem();
             }
@@ -107,6 +98,7 @@ public class UserFaceActivity extends BaseActivity {
 
     /**
      * 监听剪切好的图片并上传|剪切保存好的图片
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -114,20 +106,23 @@ public class UserFaceActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PhotoUpload.PHOTO_ZOOM && data != null) {
-
             //保存剪切好的图片
-            bitmap = data.getParcelableExtra("data");
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            File targetFile = FileUtils.writeFile(baos.toByteArray(), "cnp", "face.jpg");
+            if (data.getParcelableExtra("data") != null) {
+                bitmap = data.getParcelableExtra("data");
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                File targetFile = FileUtils.writeFile(baos.toByteArray(), "cnp", "face.png");
 
-            //上传图片资源
-            UserFaceRequest request = new UserFaceRequest(this, targetFile);
-            String lastRequestCacheKey = request.createCacheKey();
-            UserFaceRequestListener userFaceRequestListener = new UserFaceRequestListener(this);
-            spiceManager.execute(request, lastRequestCacheKey, DurationInMillis.ONE_SECOND, userFaceRequestListener.start());
+                //上传图片资源
+                UserFaceRequest request = new UserFaceRequest(this, targetFile);
+                String lastRequestCacheKey = request.createCacheKey();
+                UserFaceRequestListener userFaceRequestListener = new UserFaceRequestListener(this);
+                spiceManager.execute(request, lastRequestCacheKey, DurationInMillis.ONE_SECOND, userFaceRequestListener.start());
+
+            }
+
         } else if (requestCode == PhotoUpload.FROM_CAMERA) {
-            photoUpload.startPhotoZoom(faceFile);
+                photoUpload.startPhotoZoom(faceFile);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -136,8 +131,8 @@ public class UserFaceActivity extends BaseActivity {
      * 上传图片成功后,更新缓存中的图片
      */
     public void updateCacheAndUI() {
-        GlobalImageCache.getLruBitmapCache().put(localBitmapDigest,bitmap);
-        setResult(1,new Intent());
+        GlobalImageCache.getLruBitmapCache().put(localBitmapDigest, bitmap);
+        setResult(1, new Intent());
         this.finish();
     }
 }

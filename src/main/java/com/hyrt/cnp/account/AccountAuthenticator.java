@@ -26,19 +26,14 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.hyrt.cnp.account.model.User;
-import com.hyrt.cnp.account.service.UserService;
+import com.hyrt.cnp.base.account.model.User;
 
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.List;
+import java.io.IOException;
 
 import static android.accounts.AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE;
 import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
@@ -46,7 +41,7 @@ import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
 import static android.accounts.AccountManager.KEY_AUTHTOKEN;
 import static android.accounts.AccountManager.KEY_BOOLEAN_RESULT;
 import static android.accounts.AccountManager.KEY_INTENT;
-import static com.hyrt.cnp.account.AccountConstants.ACCOUNT_TYPE;
+import static com.hyrt.cnp.base.account.AccountConstants.ACCOUNT_TYPE;
 import static com.hyrt.cnp.account.LoginActivity.PARAM_AUTHTOKEN_TYPE;
 import static com.hyrt.cnp.account.LoginActivity.PARAM_USERNAME;
 
@@ -126,13 +121,16 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
             userModel = getCustomRestTemplate().postForObject("http://api.chinaxueqian.com/account/login", params, User.UserModel.class);
         }catch(Exception e){
             e.printStackTrace();
+            throw new NetworkErrorException(new IOException("No authentication challenges found"));
         }
-        if (userModel == null || userModel.getData() == null || TextUtils.isEmpty(userModel.getData().getToken()))
+        if (userModel == null || userModel.getData() == null || TextUtils.isEmpty(userModel.getData().getToken())){
             bundle.putParcelable(KEY_INTENT, createLoginIntent(response));
-        else {
+        }else {
             bundle.putString(KEY_ACCOUNT_NAME, account.name);
             bundle.putString(KEY_ACCOUNT_TYPE, ACCOUNT_TYPE);
-            bundle.putString(KEY_AUTHTOKEN, userModel.getData().getToken() + "&uuid=" + userModel.getData().getUuid() + "&sid=" + userModel.getData().getNursery_id());
+            bundle.putString(KEY_AUTHTOKEN, userModel.getData().getToken() + "&uuid=" + userModel.getData().getUuid() +
+                    "&sid=" + userModel.getData().getNursery_id() +
+                    "&cid=" + userModel.getData().getClassroom());
             am.clearPassword(account);
         }
         return bundle;

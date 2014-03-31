@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.hyrt.cnp"
+    package="com.hyrt.cnp.account"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -16,7 +16,7 @@
         <activity android:name="net.hockeyapp.android.UpdateActivity" />
 
         <service
-            android:name="com.hyrt.cnp.account.AccountAuthenticatorService"
+            android:name=".AccountAuthenticatorService"
             android:exported="false"
             android:process=":auth" >
             <intent-filter>

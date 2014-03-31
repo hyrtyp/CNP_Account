@@ -17,12 +17,11 @@
        android:layout_width="1px"
        android:layout_height="wrap_content"
        android:background="@color/cnp_line_color"/>
-    <EditText
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         style="@style/EditText_small"
         android:padding="@dimen/tv_padding"
         android:id="@+id/content"
-        android:hint="请输入"
         />
 </LinearLayout>

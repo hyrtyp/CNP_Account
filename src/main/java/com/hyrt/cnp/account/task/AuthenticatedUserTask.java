@@ -21,8 +21,8 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.google.inject.Inject;
-import com.hyrt.cnp.account.AccountScope;
-import com.hyrt.cnp.account.AccountUtils;
+import com.hyrt.cnp.base.account.AccountScope;
+import com.hyrt.cnp.base.account.AccountUtils;
 
 import java.io.IOException;
 import java.util.concurrent.Executor;

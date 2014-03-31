@@ -20,7 +20,7 @@
     <dimen name="user_login_btn_height">45dp</dimen>
 
 
-    <dimen name="tv_normal">10sp</dimen>
+    <dimen name="tv_normal">12sp</dimen>
     <dimen name="tv_paddingtop">8dp</dimen>
     <dimen name="tv_width">80dp</dimen>
     <dimen name="tv_padding">11dp</dimen>

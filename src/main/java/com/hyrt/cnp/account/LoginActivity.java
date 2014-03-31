@@ -1,26 +1,29 @@
 package com.hyrt.cnp.account;
 
+import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import com.hyrt.cnp.R;
-import com.hyrt.cnp.account.model.User;
+
 import com.hyrt.cnp.account.request.AuthenticatorRequest;
 import com.hyrt.cnp.account.requestListener.LoginRequestListener;
+import com.hyrt.cnp.base.account.model.User;
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 
-import net.hockeyapp.android.CrashManager;
-import net.hockeyapp.android.UpdateManager;
+import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
+import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
+import static android.accounts.AccountManager.KEY_AUTHTOKEN;
+import static com.hyrt.cnp.base.account.AccountConstants.ACCOUNT_TYPE;
 
-import roboguice.activity.RoboActivity;
-
-public class LoginActivity extends RoboActivity{
+public class LoginActivity extends AccountAuthenticatorActivity {
 
     /**
      * Auth token type parameter
@@ -33,16 +36,11 @@ public class LoginActivity extends RoboActivity{
     public static final String PARAM_USERNAME = "username";
 
     /**
-     * hockeyapp plugin APP_ID for this project
-     */
-    private static final String APP_ID = "411f163ce21e2352706900bdccb37c92";
-
-    /**
      * Was the original caller asking for an entirely new account?
      */
     protected boolean requestNewAccount = true;
     private String username = "slerman@163.com";
-    private String password = "123";
+    private String password = "123456";
     private String authTokenType;
 
     private AccountManager accountManager;
@@ -89,10 +87,9 @@ public class LoginActivity extends RoboActivity{
                 handlerLogin();
             }
         });
-        checkForUpdates();
-        //final Intent intent = getIntent();
+        final Intent intent = getIntent();
         //username = intent.getStringExtra(PARAM_USERNAME);
-        //authTokenType = intent.getStringExtra(PARAM_AUTHTOKEN_TYPE);
+        authTokenType = intent.getStringExtra(PARAM_AUTHTOKEN_TYPE);
         //requestNewAccount = username == null;
     }
 
@@ -109,21 +106,6 @@ public class LoginActivity extends RoboActivity{
         super.onStop();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        checkForCrashes();
-    }
-
-    private void checkForCrashes() {
-        CrashManager.register(this, APP_ID);
-    }
-
-    private void checkForUpdates() {
-        // Remove this for store builds!
-        UpdateManager.register(this, APP_ID);
-    }
-
     private void handlerLogin() {
         User user = new User();
         user.setUsername(username);
@@ -132,7 +114,45 @@ public class LoginActivity extends RoboActivity{
         String lastRequestCacheKey = request.createCacheKey();
         LoginRequestListener loginRequestListener = new LoginRequestListener(this);
         spiceManager.execute(request, lastRequestCacheKey,DurationInMillis.ONE_MINUTE,loginRequestListener.start());
-
     }
 
+
+    public void finishLogin(final String username, final String password) {
+        final Intent intent = new Intent();
+        intent.putExtra(KEY_ACCOUNT_NAME, username);
+        intent.putExtra(KEY_ACCOUNT_TYPE, ACCOUNT_TYPE);
+        if (ACCOUNT_TYPE.equals(authTokenType))
+            intent.putExtra(KEY_AUTHTOKEN, password);
+        setAccountAuthenticatorResult(intent.getExtras());
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if(notSupportKeyCodeBack()){
+               // exitApp(); // 退出应用处理
+            } else {
+                // 返回桌面,经测试,有一些手机不支持,查看 notSupportKeyCodeBack 方法
+                Intent i= new Intent(Intent.ACTION_MAIN);
+                i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                i.addCategory(Intent.CATEGORY_HOME);
+                startActivity(i);
+                return false;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+
+    /**
+     * 测试手机是否支持返回到桌面
+     * */
+    private boolean notSupportKeyCodeBack(){
+        if("3GW100".equals(Build.MODEL)|| "3GW101".equals(Build.MODEL) || "3GC101".equals (Build.MODEL)) {
+            return true;
+        }
+        return false;
+    }
 }

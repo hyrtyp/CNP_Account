@@ -1,13 +1,9 @@
 package com.hyrt.cnp.account.manager;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -16,13 +12,10 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import com.hyrt.cnp.R;
-import com.hyrt.cnp.account.model.UserDetail;
-import com.hyrt.cnp.account.request.UserDetailRequest;
+import com.hyrt.cnp.account.R;
+import com.hyrt.cnp.base.account.model.UserDetail;
 import com.hyrt.cnp.account.request.UserPwdRequest;
-import com.hyrt.cnp.account.requestListener.UserDetailRequestListener;
 import com.hyrt.cnp.account.requestListener.UserPwdRequestListener;
-import com.hyrt.cnp.account.utils.UITextUtils;
 import com.jingdong.common.frame.BaseActivity;
 import com.octo.android.robospice.persistence.DurationInMillis;
 
@@ -67,22 +60,17 @@ public class UserPasswordActivity extends BaseActivity{
             public View getView(final int position, View convertView, ViewGroup parent) {
                 final LinearLayout linearLayout = (LinearLayout) super.getView(position, convertView, parent);
                 if(linearLayout != null){
+                    EditText editText = (EditText) linearLayout.findViewById(R.id.content);
                     if(position == 0){
-                        EditText editText = (EditText) linearLayout.findViewById(R.id.content);
                         TextView textView =  (TextView)linearLayout.findViewById(R.id.title);
                         textView.setTextColor(getResources().getColor(android.R.color.black));
                         editText.setEnabled(false);
-                    }
-                    linearLayout.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            EditText editText = (EditText) linearLayout.findViewById(R.id.content);
-                            if(position == 0){
-                                TextView textView =  (TextView)linearLayout.findViewById(R.id.title);
-                                textView.setTextColor(getResources().getColor(android.R.color.black));
-                                editText.setEnabled(false);
-                            }else{
-                                editText.requestFocus();
+
+                    }else{
+                        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                            @Override
+                            public void onFocusChange(View v, boolean hasFocus) {
+                                EditText editText = (EditText) linearLayout.findViewById(R.id.content);
                                 editText.addTextChangedListener(new TextWatcher(){
 
                                     @Override
@@ -97,28 +85,26 @@ public class UserPasswordActivity extends BaseActivity{
 
                                     @Override
                                     public void afterTextChanged(Editable s) {
-                                        if(s.toString().length() == 0)
-                                            return;
                                         switch (position){
                                             case 1:
                                                 oldPassword.delete(0,oldPassword.length());
                                                 oldPassword.append(s.toString());
                                                 break;
                                             case 2:
-                                                newPassword.delete(0, oldPassword.length());
+                                                newPassword.delete(0, newPassword.length());
                                                 newPassword.append(s.toString());
                                                 break;
                                             case 3:
-                                                renewPassword.delete(0, oldPassword.length());
+                                                renewPassword.delete(0, renewPassword.length());
                                                 renewPassword.append(s.toString());
                                                 break;
                                         }
-
                                     }
                                 });
                             }
-                        }
-                    });
+                        });
+                    }
+
                 }
                 return linearLayout;
             }

@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.7.+'
+        classpath 'com.android.tools.build:gradle:0.9.+'
     }
 }
 apply plugin: 'android-library'
@@ -26,11 +26,6 @@ android {
         minSdkVersion 8
         targetSdkVersion 19
     }
-    release {
-        runProguard false
-        proguardFile 'proguard-rules.txt'
-        proguardFile getDefaultProguardFile('proguard-android.txt')
-    }
 }
 
 /*repositories {
@@ -38,7 +33,7 @@ android {
 }*/
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:+'
+    //compile 'com.android.support:appcompat-v7:+'
     compile 'com.octo.android.robospice:robospice-spring-android:1.4.9'
     compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.9'
     compile 'net.hockeyapp.android:HockeySDK:3.0.1'

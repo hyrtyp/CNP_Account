@@ -4,24 +4,26 @@ import android.content.Context;
 
 import com.google.inject.Inject;
 import com.hyrt.cnp.base.account.model.UserDetail;
+import com.hyrt.cnp.base.account.model.UtilVar;
 import com.hyrt.cnp.base.account.request.BaseRequest;
 import com.hyrt.cnp.base.account.service.UserService;
 
 /**
  * Created by yepeng on 14-1-3.
  */
-public class UserDetailRequest extends BaseRequest {
+public class UserVarRequest extends BaseRequest {
 
     @Inject
     private UserService userService;
-
-    public UserDetailRequest(Context context) {
+    private String name;
+    public UserVarRequest(Context context,String name) {
         super(UserDetail.UserDetailModel.class,context);
+        this.name=name;
     }
 
     @Override
-    public UserDetail.UserDetailModel run() {
-        return userService.getUser();
+    public UtilVar run() {
+        return userService.getUtilvar(name);
     }
 
     /**
@@ -30,6 +32,6 @@ public class UserDetailRequest extends BaseRequest {
      * @return
      */
     public String createCacheKey() {
-        return "user.detail";
+        return "uservar"+name;
     }
 }

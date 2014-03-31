@@ -3,25 +3,30 @@ package com.hyrt.cnp.account.request;
 import android.content.Context;
 
 import com.google.inject.Inject;
-import com.hyrt.cnp.base.account.model.UserDetail;
+import com.hyrt.cnp.base.account.model.BaseTest;
 import com.hyrt.cnp.base.account.request.BaseRequest;
 import com.hyrt.cnp.base.account.service.UserService;
+
+import java.io.File;
 
 /**
  * Created by yepeng on 14-1-3.
  */
-public class UserDetailRequest extends BaseRequest {
+public class UserFaceBgRequest extends BaseRequest {
 
     @Inject
     private UserService userService;
 
-    public UserDetailRequest(Context context) {
-        super(UserDetail.UserDetailModel.class,context);
+    private File faceFile;
+
+    public UserFaceBgRequest(Context context, File faceFile) {
+        super(BaseTest.class,context);
+        this.faceFile = faceFile;
     }
 
     @Override
-    public UserDetail.UserDetailModel run() {
-        return userService.getUser();
+    public BaseTest run() {
+        return userService.modifyUserFaceBackground(faceFile);
     }
 
     /**
@@ -30,6 +35,6 @@ public class UserDetailRequest extends BaseRequest {
      * @return
      */
     public String createCacheKey() {
-        return "user.detail";
+        return "user.facebg";
     }
 }

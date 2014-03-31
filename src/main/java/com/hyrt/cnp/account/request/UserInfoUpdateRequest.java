@@ -3,14 +3,14 @@ package com.hyrt.cnp.account.request;
 import android.content.Context;
 
 import com.google.inject.Inject;
-import com.hyrt.cnp.account.manager.UserInfoActivity;
-import com.hyrt.cnp.account.model.BaseTest;
-import com.hyrt.cnp.account.service.UserService;
+import com.hyrt.cnp.base.account.model.BaseTest;
+import com.hyrt.cnp.base.account.request.BaseRequest;
+import com.hyrt.cnp.base.account.service.UserService;
 
 /**
  * Created by yepeng on 14-1-3.
  */
-public class UserInfoUpdateRequest extends BaseRequest{
+public class UserInfoUpdateRequest extends BaseRequest {
 
     @Inject
     private UserService userService;
@@ -20,19 +20,23 @@ public class UserInfoUpdateRequest extends BaseRequest{
     private String sex;
     private String national;
     private String bloodType;
+    private String ethnic;
 
-    public UserInfoUpdateRequest(Context context, String renname, String birthday,String sex, String national, String bloodType) {
+    public UserInfoUpdateRequest(Context context,
+                                 String renname, String birthday,
+                                 String sex, String national, String bloodType,String ethnic) {
         super(BaseTest.class,context);
         this.renname = renname;
         this.birthday = birthday;
         this.sex = sex;
         this.national = national;
         this.bloodType = bloodType;
+        this.ethnic=ethnic;
     }
 
     @Override
     public BaseTest run() {
-        return userService.modifyUserInfo(renname, birthday, sex, national, bloodType);
+        return userService.modifyUserInfo(renname, birthday, sex, national, bloodType,ethnic);
     }
 
     /**

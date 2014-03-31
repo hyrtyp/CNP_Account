@@ -12,11 +12,13 @@
     <string name="face">上传头像</string>
     <string name="update_password">修改密码</string>
     <string name="update_info">修改资料</string>
+    <string name="userout">退出当前账户</string>
 
 
     <string name="user_login_pg">登陆中…</string>
     <string name="user_info_pg">获取用户信息中…</string>
     <string name="user_face_pg">修改头像中…</string>
+    <string name="user_facebg_pg">修改头像背景中…</string>
     <string name="user_pwd_pg">修改密码中…</string>
     <string name="user_updateinfo_pg">修改资料中…</string>
     <string name="update_face">修改头像</string>
@@ -26,8 +28,12 @@
     <string name="error_username">你输入的用户名密码错误,请重新输入!</string>
 
     <string name="face_msg_title">上传头像提示</string>
-    <string name="face_msg_content">上传成功!</string>
-    <string name="face_msgerror_content">上传失败,请稍后再试!</string>
+    <string name="face_msg_content">上传头像成功!</string>
+    <string name="face_msgerror_content">上传头像失败,请稍后再试!</string>
+
+    <string name="facebg_msg_title">上传头像背景提示</string>
+    <string name="facebg_msg_content">上传头像背景成功!</string>
+    <string name="facebg_msgerror_content">上传头像背景失败,请稍后再试!</string>
 
     <string name="getinfo_msg_title">友情提示</string>
     <string name="getinfod_msgerror_content">获取资料失败,请稍后再!</string>

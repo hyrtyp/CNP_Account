@@ -19,6 +19,8 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.inject.Provider;
+import com.hyrt.cnp.base.account.CNPAccount;
+import com.hyrt.cnp.base.account.CNPClient;
 
 import static android.util.Log.DEBUG;
 
@@ -26,7 +28,7 @@ import static android.util.Log.DEBUG;
  * {@link AccountClient} extensions that integrates with the Android account
  * manager to provide request credentials
  */
-public class AccountClient extends CNPClient{
+public class AccountClient extends CNPClient {
 
     private static final String TAG = "AccountClient";
 
