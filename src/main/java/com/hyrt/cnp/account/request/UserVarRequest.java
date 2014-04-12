@@ -16,14 +16,39 @@ public class UserVarRequest extends BaseRequest {
     @Inject
     private UserService userService;
     private String name;
+    private int province;
+    private String provinceName;
+    private int type = 0;
     public UserVarRequest(Context context,String name) {
         super(UserDetail.UserDetailModel.class,context);
         this.name=name;
+        type = 0;
+    }
+
+    public UserVarRequest(Context context,String name, String provinceName) {
+        super(UserDetail.UserDetailModel.class,context);
+        this.name=name;
+        this.provinceName = provinceName;
+        type = 1;
+    }
+
+    public UserVarRequest(Context context,String name, int province) {
+        super(UserDetail.UserDetailModel.class,context);
+        this.name=name;
+        this.province = province;
+        type = 2;
     }
 
     @Override
     public UtilVar run() {
-        return userService.getUtilvar(name);
+        if(type == 1){
+            return userService.getUtilvar(name, provinceName);
+        }else if(type == 2){
+            return userService.getUtilvar(name, province);
+        }else{
+            return userService.getUtilvar(name);
+        }
+
     }
 
     /**
