@@ -42,7 +42,15 @@ public class UserFaceActivity extends BaseActivity {
             public void onClick(View v) {
                 faceFile = Uri.fromFile(FileUtils.createFile("cnp", "face.png"));
                 photoUpload = new PhotoUpload(UserFaceActivity.this, faceFile);
-                photoUpload.choiceItem();
+                photoUpload.getFromLocal2();
+            }
+        });
+        findViewById(R.id.upload_face_camera).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                faceFile = Uri.fromFile(FileUtils.createFile("cnp", "face.png"));
+                photoUpload = new PhotoUpload(UserFaceActivity.this, faceFile);
+                photoUpload.getFromCamera(faceFile);
             }
         });
         initData();

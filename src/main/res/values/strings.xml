@@ -8,10 +8,12 @@
     <string name="login_activity_authenticating">Logging in…</string>
     <string name="username">用户名</string>
     <string name="password">密码</string>
-    <string name="login">登陆</string>
-    <string name="face">上传头像</string>
+    <string name="login">登录</string>
+    <string name="get_account_prompt">请联系宝宝所在\n幼儿园的班主任,\n以获取登录账号。</string>
+    <string name="face_from_album">上传头像照片</string>
+    <string name="face_from_camera">摄像拍摄照片</string>
     <string name="update_password">修改密码</string>
-    <string name="update_info">修改资料</string>
+    <string name="update_info">保存修改</string>
     <string name="userout">退出当前账户</string>
 
 

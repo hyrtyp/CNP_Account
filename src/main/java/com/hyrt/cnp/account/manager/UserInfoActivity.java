@@ -3,6 +3,7 @@ package com.hyrt.cnp.account.manager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.hyrt.cnp.account.R;
+import com.hyrt.cnp.account.adapter.UserInfoAdapter;
 import com.hyrt.cnp.base.account.model.UserDetail;
 import com.hyrt.cnp.account.request.UserInfoUpdateRequest;
 import com.hyrt.cnp.account.request.UserVarRequest;
@@ -51,7 +53,7 @@ public class UserInfoActivity extends BaseActivity {
     private int ethnicid=0;
     private int bloodtypeid=0;
     private List<Map<String, String>> values;
-    private SimpleAdapter simpleAdapter;
+    private UserInfoAdapter simpleAdapter;
     private int num=5;
 
     @Override
@@ -112,13 +114,14 @@ public class UserInfoActivity extends BaseActivity {
             bloodtypeid=Integer.valueOf(userDetailModel.getData().getBloodType());
             ethnicid=Integer.valueOf(userDetailModel.getData().getEthnic());
         }
-        simpleAdapter=new SimpleAdapter(this, values, R.layout.user_info_item2, new String[]{"title", "content"}
+        simpleAdapter=new UserInfoAdapter(this, values, R.layout.user_info_item2, new String[]{"title", "content"}
                 , new int[]{R.id.title, R.id.content}) {
             @Override
             public View getView(final int position, View convertView, ViewGroup parent) {
                 final LinearLayout linearLayout = (LinearLayout) super.getView(position, convertView, parent);
                 if (linearLayout != null) {
                     final TextView editText = (TextView) linearLayout.findViewById(R.id.content);
+                    editText.setOnClickListener(null);
                     switch (position){
                         case 5:
                             editText.setOnClickListener(new View.OnClickListener() {
@@ -182,6 +185,8 @@ public class UserInfoActivity extends BaseActivity {
         } else {
             findViewById(R.id.userinfo_btn).setVisibility(View.GONE);
         }
+        TextView prompt = (TextView) findViewById(R.id.prompt);
+        prompt.setText(Html.fromHtml("提示：点击修改资料，<font color='red'>&nbsp\"*\"&nbsp</font>为不可修改"));
     }
 
     @Override

@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.hyrt.cnp.account.manager.WelcomeActivity;
 import com.hyrt.cnp.base.account.model.User;
 
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -68,7 +69,9 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
                              final String accountType, final String authTokenType,
                              final String[] requiredFeatures, final Bundle options)
             throws NetworkErrorException {
+        Log.i(TAG, "addAccount");
         final Intent intent = new Intent(context, LoginActivity.class);
+//        final Intent intent = new Intent(context, WelcomeActivity.class);
         intent.putExtra(PARAM_AUTHTOKEN_TYPE, authTokenType);
         intent.putExtra(KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
         final Bundle bundle = new Bundle();
@@ -90,6 +93,7 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
     }
 
     private Intent createLoginIntent(final AccountAuthenticatorResponse response) {
+        Log.i(TAG, "createLoginIntent");
         final Intent intent = new Intent(context, LoginActivity.class);
         intent.putExtra(PARAM_AUTHTOKEN_TYPE, ACCOUNT_TYPE);
         intent.putExtra(KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
@@ -161,6 +165,7 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
     public Bundle updateCredentials(
             final AccountAuthenticatorResponse response, final Account account,
             final String authTokenType, final Bundle options) {
+        Log.i(TAG, "updateCredentials");
         final Intent intent = new Intent(context, LoginActivity.class);
         intent.putExtra(PARAM_AUTHTOKEN_TYPE, authTokenType);
         intent.putExtra(KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);

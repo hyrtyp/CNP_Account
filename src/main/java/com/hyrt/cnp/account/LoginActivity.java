@@ -5,19 +5,23 @@ import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.hyrt.cnp.account.request.AuthenticatorRequest;
 import com.hyrt.cnp.account.requestListener.LoginRequestListener;
 import com.hyrt.cnp.base.account.model.User;
+import com.hyrt.cnp.school.ui.SchoolSearchResultActivity;
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 
+import static android.accounts.AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE;
 import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
 import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
 import static android.accounts.AccountManager.KEY_AUTHTOKEN;
@@ -73,9 +77,43 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_login);
+        Intent intent = getIntent();
+        //username = intent.getStringExtra(PARAM_USERNAME);
+        authTokenType = intent.getStringExtra(PARAM_AUTHTOKEN_TYPE);
+        int type = intent.getIntExtra("type", 0);
+
+        loadLogin();
+
+    }
+
+    private void loadWelcome(){
+        Button btnSearch = (Button) findViewById(R.id.btn_search);
+        Button btnLogin = (Button) findViewById(R.id.btn_login);
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setClass(LoginActivity.this, SchoolSearchResultActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setContentView(R.layout.user_login);
+                loadLogin();
+            }
+        });
+    }
+
+    private void loadLogin(){
         accountManager = AccountManager.get(this);
         usernameEt = (EditText)findViewById(R.id.login_name_et);
         passwordEt = (EditText)findViewById(R.id.login_password_et);
+        TextView tv_none_account = (TextView) findViewById(R.id.tv_none_account);
+        tv_none_account.setText(Html.fromHtml("<u>没有登录账号?</u>"));
         loginBtn = (Button)findViewById(R.id.login_btn);
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,9 +125,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
                 handlerLogin();
             }
         });
-        final Intent intent = getIntent();
-        //username = intent.getStringExtra(PARAM_USERNAME);
-        authTokenType = intent.getStringExtra(PARAM_AUTHTOKEN_TYPE);
+
         //requestNewAccount = username == null;
     }
 
