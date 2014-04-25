@@ -17,10 +17,12 @@ import java.util.Map;
  */
 public class UserInfoAdapter extends SimpleAdapter{
     private List<Map<String, String>> datas;
+    private boolean mybabayinfo;
 
-    public UserInfoAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from, int[] to) {
+    public UserInfoAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from, int[] to, boolean mybabayinfo) {
         super(context, data, resource, from, to);
         this.datas = (List<Map<String, String>>)data;
+        this.mybabayinfo = mybabayinfo;
     }
 
     @Override
@@ -28,7 +30,12 @@ public class UserInfoAdapter extends SimpleAdapter{
         View view = super.getView(position, convertView, parent);
         if(position < 5){
             TextView title = (TextView) view.findViewById(R.id.title);
-            title.setText(Html.fromHtml("<font color='red'>*</font>"+datas.get(position).get("title")));
+            if(mybabayinfo){
+                title.setText(Html.fromHtml("<font color='red'>*</font>"+datas.get(position).get("title")));
+            }else{
+                title.setText(datas.get(position).get("title"));
+            }
+
         }
         return view;
     }

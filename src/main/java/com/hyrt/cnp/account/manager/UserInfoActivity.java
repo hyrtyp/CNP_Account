@@ -115,7 +115,7 @@ public class UserInfoActivity extends BaseActivity {
             ethnicid=Integer.valueOf(userDetailModel.getData().getEthnic());
         }
         simpleAdapter=new UserInfoAdapter(this, values, R.layout.user_info_item2, new String[]{"title", "content"}
-                , new int[]{R.id.title, R.id.content}) {
+                , new int[]{R.id.title, R.id.content}, mybabayinfo) {
             @Override
             public View getView(final int position, View convertView, ViewGroup parent) {
                 final LinearLayout linearLayout = (LinearLayout) super.getView(position, convertView, parent);
@@ -169,9 +169,14 @@ public class UserInfoActivity extends BaseActivity {
      * */
 
     private void initView(){
+        TextView prompt = (TextView) findViewById(R.id.prompt);
+
         if(mybabayinfo){
+            prompt.setText(Html.fromHtml("提示：点击修改资料，<font color='red'>&nbsp\"*\"&nbsp</font>为不可修改"));
+            prompt.setVisibility(View.VISIBLE);
             titletext.setText("用户资料");
         }else{
+            prompt.setVisibility(View.GONE);
             titletext.setText("宝宝资料");
         }
         ((ListView) findViewById(R.id.user_info_listview)).setAdapter(simpleAdapter);
@@ -185,8 +190,7 @@ public class UserInfoActivity extends BaseActivity {
         } else {
             findViewById(R.id.userinfo_btn).setVisibility(View.GONE);
         }
-        TextView prompt = (TextView) findViewById(R.id.prompt);
-        prompt.setText(Html.fromHtml("提示：点击修改资料，<font color='red'>&nbsp\"*\"&nbsp</font>为不可修改"));
+
     }
 
     @Override
