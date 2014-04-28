@@ -18,6 +18,7 @@ import com.jingdong.app.pad.product.drawable.HandlerRecycleBitmapDrawable;
 import com.jingdong.app.pad.utils.InflateUtil;
 import com.jingdong.common.frame.BaseActivity;
 import com.jingdong.common.utils.cache.GlobalImageCache;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.octo.android.robospice.persistence.DurationInMillis;
 
 import java.io.ByteArrayOutputStream;
@@ -116,6 +117,8 @@ public class UserFaceActivity extends BaseActivity {
         if (requestCode == PhotoUpload.PHOTO_ZOOM && data != null) {
             //保存剪切好的图片
             if (data.getParcelableExtra("data") != null) {
+                ImageLoader.getInstance().clearMemoryCache();
+                ImageLoader.getInstance().clearDiscCache();
                 bitmap = data.getParcelableExtra("data");
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -130,7 +133,14 @@ public class UserFaceActivity extends BaseActivity {
             }
 
         } else if (requestCode == PhotoUpload.FROM_CAMERA) {
-                photoUpload.startPhotoZoom(faceFile);
+            android.util.Log.i("tag", "photoUpload:"+photoUpload);
+            if(photoUpload == null){
+                if(faceFile == null){
+                    faceFile = Uri.fromFile(FileUtils.createFile("cnp", "face.png"));
+                }
+                photoUpload = new PhotoUpload(UserFaceActivity.this, faceFile);
+            }
+            photoUpload.startPhotoZoom(faceFile);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
