@@ -28,6 +28,7 @@ import com.jingdong.app.pad.product.drawable.HandlerRecycleBitmapDrawable;
 import com.jingdong.app.pad.utils.InflateUtil;
 import com.jingdong.common.frame.BaseActivity;
 import com.jingdong.common.utils.cache.GlobalImageCache;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import net.oschina.app.AppContext;
 
@@ -37,11 +38,11 @@ public class UserMainActivity extends BaseActivity {
 
     private UserDetail.UserDetailModel userDetail;
 
-    private WeakReference<ImageView> weakImageView;
+//    private WeakReference<ImageView> weakImageView;
 
     public final static int UPDATE_FACE = 1;
 
-    private GlobalImageCache.BitmapDigest localBitmapDigest;
+//    private GlobalImageCache.BitmapDigest localBitmapDigest;
 
 
 
@@ -135,10 +136,11 @@ public class UserMainActivity extends BaseActivity {
         this.userDetail = userDetail;
         String facePath = FaceUtils.getAvatar(userDetail.getData().getUser_id(),FaceUtils.FACE_BIG);
         ImageView imageView = (ImageView)findViewById(R.id.user_face);
-        weakImageView = new WeakReference<ImageView>(imageView);
+        ImageLoader.getInstance().displayImage(facePath+"?time="+userDetail.getData().getLogo(), imageView, AppContext.getInstance().mNoCacheOnDiscImageloadoptions);
+//        weakImageView = new WeakReference<ImageView>(imageView);
         ((TextView) findViewById(R.id.class_tv)).setText(userDetail.getData().getNurseryName());
         ((TextView) findViewById(R.id.name_tv)).setText(userDetail.getData().getRenname());
-        HandlerRecycleBitmapDrawable localHandlerRecycleBitmapDrawable = new HandlerRecycleBitmapDrawable(null, this);
+       /* HandlerRecycleBitmapDrawable localHandlerRecycleBitmapDrawable = new HandlerRecycleBitmapDrawable(null, this);
         imageView.setImageDrawable(localHandlerRecycleBitmapDrawable);
         localBitmapDigest = new GlobalImageCache.BitmapDigest(facePath+"?time="+userDetail.getData().getLogo());
         localBitmapDigest.setWidth(imageView.getWidth());
@@ -172,7 +174,7 @@ public class UserMainActivity extends BaseActivity {
         } else {
             localHandlerRecycleBitmapDrawable.setBitmap(localBitmap);
             localHandlerRecycleBitmapDrawable.invalidateSelf();
-        }
+        }*/
     }
 
     /**

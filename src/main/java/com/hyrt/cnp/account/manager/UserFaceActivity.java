@@ -21,6 +21,8 @@ import com.jingdong.common.utils.cache.GlobalImageCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.octo.android.robospice.persistence.DurationInMillis;
 
+import net.oschina.app.AppContext;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -28,11 +30,11 @@ import java.lang.ref.WeakReference;
 public class UserFaceActivity extends BaseActivity {
 
     private static final String TAG = "UserFaceActivity";
-    private WeakReference<ImageView> weakImageView;
+//    private WeakReference<ImageView> weakImageView;
     private PhotoUpload photoUpload;
     private Uri faceFile;
     private Bitmap bitmap;
-    private GlobalImageCache.BitmapDigest localBitmapDigest;
+//    private GlobalImageCache.BitmapDigest localBitmapDigest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,8 @@ public class UserFaceActivity extends BaseActivity {
         findViewById(R.id.upload_face).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ImageLoader.getInstance().clearMemoryCache();
+                ImageLoader.getInstance().clearDiscCache();
                 faceFile = Uri.fromFile(FileUtils.createFile("cnp", "face.png"));
                 photoUpload = new PhotoUpload(UserFaceActivity.this, faceFile);
                 photoUpload.getFromLocal2();
@@ -49,6 +53,8 @@ public class UserFaceActivity extends BaseActivity {
         findViewById(R.id.upload_face_camera).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ImageLoader.getInstance().clearMemoryCache();
+                ImageLoader.getInstance().clearDiscCache();
                 faceFile = Uri.fromFile(FileUtils.createFile("cnp", "face.png"));
                 photoUpload = new PhotoUpload(UserFaceActivity.this, faceFile);
                 photoUpload.getFromCamera(faceFile);
@@ -66,7 +72,8 @@ public class UserFaceActivity extends BaseActivity {
         UserDetail.UserDetailModel userDetail = (UserDetail.UserDetailModel) getIntent().getSerializableExtra("vo");
         String facePath = FaceUtils.getAvatar(userDetail.getData().getUser_id(), FaceUtils.FACE_BIG);
         ImageView imageView = (ImageView) findViewById(R.id.big_face);
-        weakImageView = new WeakReference<ImageView>(imageView);
+        ImageLoader.getInstance().displayImage(facePath+"?time="+userDetail.getData().getLogo(), imageView, AppContext.getInstance().mNoCacheOnDiscImageloadoptions);
+        /*weakImageView = new WeakReference<ImageView>(imageView);
         HandlerRecycleBitmapDrawable localHandlerRecycleBitmapDrawable = new HandlerRecycleBitmapDrawable(null, this);
         imageView.setImageDrawable(localHandlerRecycleBitmapDrawable);
         localBitmapDigest = new GlobalImageCache.BitmapDigest(facePath);
@@ -101,7 +108,7 @@ public class UserFaceActivity extends BaseActivity {
         } else {
             localHandlerRecycleBitmapDrawable.setBitmap(localBitmap);
             localHandlerRecycleBitmapDrawable.invalidateSelf();
-        }
+        }*/
 
     }
 
@@ -114,11 +121,15 @@ public class UserFaceActivity extends BaseActivity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        android.util.Log.i("tag", "faceFile:"+faceFile+" data:"+data);
+//        if(requestCode == PhotoUpload.PHOTO_ZOOM && faceFile != null){
+//            android.util.Log.i("tag", "faceFile:"+faceFile);
+//        }
         if (requestCode == PhotoUpload.PHOTO_ZOOM && data != null) {
             //保存剪切好的图片
+            ImageLoader.getInstance().clearMemoryCache();
+            ImageLoader.getInstance().clearDiscCache();
             if (data.getParcelableExtra("data") != null) {
-                ImageLoader.getInstance().clearMemoryCache();
-                ImageLoader.getInstance().clearDiscCache();
                 bitmap = data.getParcelableExtra("data");
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -149,7 +160,7 @@ public class UserFaceActivity extends BaseActivity {
      * 上传图片成功后,更新缓存中的图片
      */
     public void updateCacheAndUI() {
-        GlobalImageCache.getLruBitmapCache().put(localBitmapDigest, bitmap);
+       // GlobalImageCache.getLruBitmapCache().put(localBitmapDigest, bitmap);
         setResult(1, new Intent());
         this.finish();
     }
