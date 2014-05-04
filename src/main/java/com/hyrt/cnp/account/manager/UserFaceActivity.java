@@ -53,8 +53,8 @@ public class UserFaceActivity extends BaseActivity {
         findViewById(R.id.upload_face_camera).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImageLoader.getInstance().clearMemoryCache();
-                ImageLoader.getInstance().clearDiscCache();
+//                ImageLoader.getInstance().clearMemoryCache();
+//                ImageLoader.getInstance().clearDiscCache();
                 faceFile = Uri.fromFile(FileUtils.createFile("cnp", "face.png"));
                 photoUpload = new PhotoUpload(UserFaceActivity.this, faceFile);
                 photoUpload.getFromCamera(faceFile);
@@ -128,7 +128,7 @@ public class UserFaceActivity extends BaseActivity {
         if (requestCode == PhotoUpload.PHOTO_ZOOM && data != null) {
             //保存剪切好的图片
             ImageLoader.getInstance().clearMemoryCache();
-            ImageLoader.getInstance().clearDiscCache();
+//            ImageLoader.getInstance().clearDiscCache();
             if (data.getParcelableExtra("data") != null) {
                 bitmap = data.getParcelableExtra("data");
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
