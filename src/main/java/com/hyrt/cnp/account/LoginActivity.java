@@ -52,6 +52,11 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     private EditText usernameEt;
     private EditText passwordEt;
     private Button loginBtn;
+
+    private boolean isLoginPage = false;
+
+    public static final int RESULT_FROM_SEARCH_ACTIVITY = 101;
+
     public SpiceManager spiceManager = new SpiceManager(
             JacksonSpringAndroidSpiceService.class);
 
@@ -76,17 +81,17 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         //无title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.user_login);
+//        setContentView(R.layout.user_login);
+        loadWelcome();
         Intent intent = getIntent();
         //username = intent.getStringExtra(PARAM_USERNAME);
         authTokenType = intent.getStringExtra(PARAM_AUTHTOKEN_TYPE);
         int type = intent.getIntExtra("type", 0);
-
-        loadLogin();
-
     }
 
     private void loadWelcome(){
+        isLoginPage = false;
+        setContentView(R.layout.activity_welcome);
         Button btnSearch = (Button) findViewById(R.id.btn_search);
         Button btnLogin = (Button) findViewById(R.id.btn_login);
 
@@ -95,20 +100,22 @@ public class LoginActivity extends AccountAuthenticatorActivity {
             public void onClick(View view) {
                 Intent intent = new Intent();
                 intent.setClass(LoginActivity.this, SchoolSearchResultActivity.class);
-                startActivity(intent);
+                intent.putExtra("isLogin", false);
+                startActivityForResult(intent, RESULT_FROM_SEARCH_ACTIVITY);
             }
         });
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setContentView(R.layout.user_login);
                 loadLogin();
             }
         });
     }
 
     private void loadLogin(){
+        isLoginPage = true;
+        setContentView(R.layout.user_login);
         accountManager = AccountManager.get(this);
         usernameEt = (EditText)findViewById(R.id.login_name_et);
         passwordEt = (EditText)findViewById(R.id.login_password_et);
@@ -129,6 +136,13 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         //requestNewAccount = username == null;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_FROM_SEARCH_ACTIVITY){
+            loadLogin();
+        }
+    }
 
     @Override
     protected void onStart() {
@@ -167,6 +181,10 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if(isLoginPage){
+                loadWelcome();
+                return true;
+            }
             if(notSupportKeyCodeBack()){
                // exitApp(); // 退出应用处理
             } else {
@@ -175,7 +193,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
                 i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 i.addCategory(Intent.CATEGORY_HOME);
                 startActivity(i);
-                return false;
+                return true;
             }
         }
         return super.onKeyDown(keyCode, event);
