@@ -26,7 +26,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Andy"
                 style="@style/TextView"
                 android:id="@+id/name_tv" />
 
@@ -35,7 +34,6 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/tv_paddingtop"
                 style="@style/TextView"
-                android:text="向日葵小班"
                 android:id="@+id/class_tv" />
 
         </LinearLayout>

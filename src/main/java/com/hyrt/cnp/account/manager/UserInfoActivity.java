@@ -94,8 +94,18 @@ public class UserInfoActivity extends BaseActivity {
         values.add(item4);
         Map<String, String> item5 = new HashMap<String, String>();
         item5.put("title", "性别");
-        sex.append(userDetailModel.getData().getSex());
-        item5.put("content", userDetailModel.getData().getSex());
+        String strSex = "";
+        String mSex = userDetailModel.getData().getSex();
+        if(mSex != null && mSex.trim().length() > 0){
+            if(mSex.toUpperCase().equals("M")){
+                strSex = "男";
+            }
+            if(mSex.toUpperCase().equals("W")){
+                strSex = "女";
+            }
+        }
+        sex.append(strSex);
+        item5.put("content", strSex);
         values.add(item5);
         Map<String, String> item6 = new HashMap<String, String>();
         item6.put("title", "国籍");
@@ -106,7 +116,7 @@ public class UserInfoActivity extends BaseActivity {
         item7.put("content", userDetailModel.getData().getBloodType());
         values.add(item7);
         Map<String, String> item8 = new HashMap<String, String>();
-        item8.put("title", "名族");
+        item8.put("title", "民族");
         item8.put("content", userDetailModel.getData().getEthnic());
         values.add(item8);
         if(mybabayinfo){
@@ -236,7 +246,7 @@ public class UserInfoActivity extends BaseActivity {
                 DurationInMillis.ONE_SECOND, userbloodTypeListener.start());
     }
     /**
-     * 设置提示窗口名族
+     * 设置提示窗口民族
      * */
     public void SetVar_ethnic(Map<String,String> map){
         ethnic=MaptoStr(map);
@@ -316,7 +326,7 @@ public class UserInfoActivity extends BaseActivity {
         item7.put("content", bloodtype[bloodtypeid]);
         values.add(6,item7);
         Map<String, String> item8 = new HashMap<String, String>();
-        item8.put("title", "名族");
+        item8.put("title", "民族");
         item8.put("content",ethnic[ethnicid]);
         values.add(7,item8);
         simpleAdapter.notifyDataSetChanged();

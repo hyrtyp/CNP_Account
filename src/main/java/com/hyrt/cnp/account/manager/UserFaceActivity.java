@@ -72,6 +72,7 @@ public class UserFaceActivity extends BaseActivity {
         UserDetail.UserDetailModel userDetail = (UserDetail.UserDetailModel) getIntent().getSerializableExtra("vo");
         String facePath = FaceUtils.getAvatar(userDetail.getData().getUser_id(), FaceUtils.FACE_BIG);
         ImageView imageView = (ImageView) findViewById(R.id.big_face);
+        android.util.Log.i("tag", "path:"+facePath+"?time="+userDetail.getData().getLogo());
         ImageLoader.getInstance().displayImage(facePath+"?time="+userDetail.getData().getLogo(), imageView, AppContext.getInstance().mNoCacheOnDiscImageloadoptions);
         /*weakImageView = new WeakReference<ImageView>(imageView);
         HandlerRecycleBitmapDrawable localHandlerRecycleBitmapDrawable = new HandlerRecycleBitmapDrawable(null, this);
