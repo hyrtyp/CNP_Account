@@ -26,7 +26,7 @@ public class AuthenticatorRequest extends SpringAndroidSpiceRequest {
      * @return
      */
     public String createCacheKey() {
-        return "user.";
+        return "user."+user.getUsername();
     }
 
     @Override

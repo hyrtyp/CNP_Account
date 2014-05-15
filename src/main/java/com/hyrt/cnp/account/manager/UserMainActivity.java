@@ -85,6 +85,7 @@ public class UserMainActivity extends BaseActivity {
         findViewById(R.id.userout_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AppContext.getInstance().mUserDetail = null;
                 AccountManager.get(UserMainActivity.this).removeAccount(
                         AccountUtils.getAccount(UserMainActivity.this),
                         new AccountManagerCallback<Boolean>() {

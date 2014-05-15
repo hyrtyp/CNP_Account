@@ -30,6 +30,6 @@ public class UserDetailRequest extends BaseRequest {
      * @return
      */
     public String createCacheKey() {
-        return "user.detail";
+        return "user.detail"+System.currentTimeMillis();
     }
 }

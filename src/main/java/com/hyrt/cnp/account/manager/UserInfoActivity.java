@@ -99,8 +99,7 @@ public class UserInfoActivity extends BaseActivity {
         if(mSex != null && mSex.trim().length() > 0){
             if(mSex.toUpperCase().equals("M")){
                 strSex = "男";
-            }
-            if(mSex.toUpperCase().equals("W")){
+            }else{
                 strSex = "女";
             }
         }

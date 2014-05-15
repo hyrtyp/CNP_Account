@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.hyrt.cnp.account.request.AuthenticatorRequest;
 import com.hyrt.cnp.account.requestListener.LoginRequestListener;
 import com.hyrt.cnp.base.account.model.User;
+import com.hyrt.cnp.base.account.utils.AlertUtils;
 import com.hyrt.cnp.school.ui.SchoolSearchResultActivity;
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
@@ -43,8 +44,8 @@ public class LoginActivity extends AccountAuthenticatorActivity {
      * Was the original caller asking for an entirely new account?
      */
     protected boolean requestNewAccount = true;
-    private String username = "slerman@163.com";
-    private String password = "123456";
+    private String username = "";//slerman@163.com
+    private String password = "";//123456
     private String authTokenType;
 
     private AccountManager accountManager;
@@ -125,11 +126,17 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!usernameEt.getText().toString().equals("")){
-                    username = usernameEt.getText().toString();
-                    password = passwordEt.getText().toString();
-                }
-                handlerLogin();
+                    if(usernameEt.getText().toString().length() <= 0){
+                        AlertUtils.getInstance().showCenterToast(LoginActivity.this, "用户名不能为空！");
+                    }else if(passwordEt.getText().toString().length() <= 0){
+                        AlertUtils.getInstance().showCenterToast(LoginActivity.this, "密码不能为空！");
+                    }else{
+                        //                if(!usernameEt.getText().toString().equals("")){
+                        username = usernameEt.getText().toString();
+                        password = passwordEt.getText().toString();
+//                }
+                        handlerLogin();
+                    }
             }
         });
 
