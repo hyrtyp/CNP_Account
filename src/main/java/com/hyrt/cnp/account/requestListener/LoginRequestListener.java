@@ -2,11 +2,13 @@ package com.hyrt.cnp.account.requestListener;
 
 import android.accounts.Account;
 import android.app.Activity;
+import android.content.Context;
 
 import com.hyrt.cnp.account.R;
 import com.hyrt.cnp.account.LoginActivity;
 import com.hyrt.cnp.base.account.model.User;
 import com.hyrt.cnp.base.account.requestListener.BaseRequestListener;
+import com.hyrt.cnp.base.account.utils.AlertUtils;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
 import static com.hyrt.cnp.base.account.AccountConstants.ACCOUNT_TYPE;
@@ -16,11 +18,14 @@ import static com.hyrt.cnp.base.account.AccountConstants.ACCOUNT_TYPE;
  */
 public class LoginRequestListener extends BaseRequestListener {
 
+    private Context mContext;
+
     /**
      * @param context
      */
     public LoginRequestListener(Activity context) {
         super(context);
+        this.mContext = context;
     }
 
     @Override
@@ -32,14 +37,26 @@ public class LoginRequestListener extends BaseRequestListener {
     @Override
     public void onRequestSuccess(Object user) {
         super.onRequestSuccess(user);
+            if(user != null){
+                try{
+                    String strGroupId =  ((User.UserModel) user).getData().getGroupID();
+                    int groupId = Integer.parseInt(strGroupId);
+                    if(groupId == 2){
+                        AlertUtils.getInstance().showCenterToast(mContext, "该用户无法登录");
+                    }
+                }catch (NumberFormatException e){
+
+                }
+            }
             Account account = new Account(((User.UserModel)user).getData().getUsername(), ACCOUNT_TYPE);
             if(context != null && context.get()!=null){
                 LoginActivity loginActivity = (LoginActivity) context.get();
                 if (loginActivity.isRequestNewAccount()) {
                     loginActivity.getAccountManager()
                             .addAccountExplicitly(account, loginActivity.getPassword(), null);
-                } else
+                } else {
                     loginActivity.getAccountManager().setPassword(account, loginActivity.getPassword());
+                }
                 loginActivity.finishLogin(account.name,loginActivity.getPassword());
             }
     }
