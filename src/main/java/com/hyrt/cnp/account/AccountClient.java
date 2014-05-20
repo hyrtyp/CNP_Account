@@ -21,6 +21,7 @@ import android.util.Log;
 import com.google.inject.Provider;
 import com.hyrt.cnp.base.account.CNPAccount;
 import com.hyrt.cnp.base.account.CNPClient;
+import com.hyrt.cnp.base.account.utils.LogHelper;
 
 import static android.util.Log.DEBUG;
 
@@ -49,8 +50,8 @@ public class AccountClient extends CNPClient {
     public void configureRequest() {
         CNPAccount account = accountProvider.get();
 
-        if (Log.isLoggable(TAG, DEBUG))
-            Log.d(TAG, "Authenticating using " + account);
+//        if (Log.isLoggable(TAG, DEBUG))
+            LogHelper.d(TAG, "Authenticating using " + account);
         String token = account.getAuthToken();
         if (!TextUtils.isEmpty(token))
             setOAuth2Token(token);
