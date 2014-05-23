@@ -38,7 +38,7 @@
     <string name="facebg_msgerror_content">上传头像背景失败,请稍后再试!</string>
 
     <string name="getinfo_msg_title">友情提示</string>
-    <string name="getinfod_msgerror_content">获取资料失败,请稍后再!</string>
+    <string name="getinfod_msgerror_content">获取资料失败,请稍后再试!</string>
 
     <string name="pwd_msg_title">修改密码提示</string>
     <string name="pwd_msg_content">修改成功!</string>

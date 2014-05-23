@@ -4,17 +4,24 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hyrt.cnp.account.R;
@@ -24,6 +31,7 @@ import com.hyrt.cnp.base.account.model.UserDetail;
 import com.hyrt.cnp.account.request.UserDetailRequest;
 import com.hyrt.cnp.account.requestListener.UserDetailRequestListener;
 import com.hyrt.cnp.base.account.utils.FaceUtils;
+import com.hyrt.cnp.base.account.utils.ScreenAdaptHelper;
 import com.jingdong.app.pad.product.drawable.HandlerRecycleBitmapDrawable;
 import com.jingdong.app.pad.utils.InflateUtil;
 import com.jingdong.common.frame.BaseActivity;
@@ -85,29 +93,55 @@ public class UserMainActivity extends BaseActivity {
         findViewById(R.id.userout_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppContext.getInstance().mUserDetail = null;
-                AccountManager.get(UserMainActivity.this).removeAccount(
-                        AccountUtils.getAccount(UserMainActivity.this),
-                        new AccountManagerCallback<Boolean>() {
+
+                View popView = getLayoutInflater().inflate(
+                        R.layout.layout_sign_out_dialog, null);
+                final PopupWindow mPopWin = new PopupWindow(popView, ScreenAdaptHelper.getInstance(UserMainActivity.this).dipToPx(260),
+                        ScreenAdaptHelper.getInstance(UserMainActivity.this).dipToPx(130));
+                mPopWin.setOutsideTouchable(true);
+                mPopWin.setBackgroundDrawable(new BitmapDrawable());
+                mPopWin.setFocusable(true);
+                mPopWin.setTouchable(true);
+                mPopWin.showAtLocation(UserMainActivity.this.getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+                TextView tv_sign_out_cancle = (TextView) popView.findViewById(R.id.tv_sign_out_cancle);
+                TextView tv_sign_out_submit = (TextView) popView.findViewById(R.id.tv_sign_out_submit);
+                tv_sign_out_cancle.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void run(AccountManagerFuture<Boolean> booleanAccountManagerFuture) {
-                        Intent intent = new Intent();
-                        intent.setClass(UserMainActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
+                    public void onClick(View view) {
+                        mPopWin.dismiss();
                     }
-                },new AsyncQueryHandler(new ContentResolver(getApplication()) {
-                            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-                            @Override
-                            public String[] getStreamTypes(Uri url, String mimeTypeFilter) {
-                                return super.getStreamTypes(url, mimeTypeFilter);
-                            }
-                        }) {
-                            @Override
-                            protected Handler createHandler(Looper looper) {
-                                return super.createHandler(looper);
-                            }
-                        });
+                });
+                tv_sign_out_submit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        AppContext.getInstance().mUserDetail = null;
+                        AccountManager.get(UserMainActivity.this).removeAccount(
+                                AccountUtils.getAccount(UserMainActivity.this),
+                                new AccountManagerCallback<Boolean>() {
+                                    @Override
+                                    public void run(AccountManagerFuture<Boolean> booleanAccountManagerFuture) {
+                                        Intent intent = new Intent();
+                                        intent.setClass(UserMainActivity.this, LoginActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                }, new AsyncQueryHandler(new ContentResolver(getApplication()) {
+                                    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+                                    @Override
+                                    public String[] getStreamTypes(Uri url, String mimeTypeFilter) {
+                                        return super.getStreamTypes(url, mimeTypeFilter);
+                                    }
+                                }) {
+                                    @Override
+                                    protected Handler createHandler(Looper looper) {
+                                        return super.createHandler(looper);
+                                    }
+                                }
+                        );
+                    }
+                });
+
+
             }
         });
     }
